@@ -11,9 +11,14 @@
 #include "diskio.h"		/* Declarations of disk functions */
 
 /* Definitions of physical drive number for each drive */
+#if 1
+// 20200828 taylor
+#define DEV_SD		0	/* Example: Map SD/MMC to physical drive 0 */
+#else
 #define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
 #define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
 #define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
+#endif
 
 
 /*-----------------------------------------------------------------------*/
@@ -27,6 +32,9 @@ DSTATUS disk_status (
 	DSTATUS stat;
 	int result;
 
+#if 1
+// 20200828 taylor
+#else
 	switch (pdrv) {
 	case DEV_RAM :
 		result = RAM_disk_status();
@@ -49,6 +57,7 @@ DSTATUS disk_status (
 
 		return stat;
 	}
+#endif
 	return STA_NOINIT;
 }
 
@@ -65,6 +74,9 @@ DSTATUS disk_initialize (
 	DSTATUS stat;
 	int result;
 
+#if 1
+  // 20200828 taylor
+#else
 	switch (pdrv) {
 	case DEV_RAM :
 		result = RAM_disk_initialize();
@@ -87,6 +99,7 @@ DSTATUS disk_initialize (
 
 		return stat;
 	}
+#endif
 	return STA_NOINIT;
 }
 
@@ -106,6 +119,9 @@ DRESULT disk_read (
 	DRESULT res;
 	int result;
 
+#if 1
+  // 20200828 taylor
+#else
 	switch (pdrv) {
 	case DEV_RAM :
 		// translate the arguments here
@@ -134,7 +150,7 @@ DRESULT disk_read (
 
 		return res;
 	}
-
+#endif
 	return RES_PARERR;
 }
 
@@ -156,6 +172,9 @@ DRESULT disk_write (
 	DRESULT res;
 	int result;
 
+#if 1
+  // 20200828 taylor
+#else
 	switch (pdrv) {
 	case DEV_RAM :
 		// translate the arguments here
@@ -184,7 +203,7 @@ DRESULT disk_write (
 
 		return res;
 	}
-
+#endif
 	return RES_PARERR;
 }
 
@@ -204,6 +223,9 @@ DRESULT disk_ioctl (
 	DRESULT res;
 	int result;
 
+#if 1
+  // 20200828 taylor
+#else
 	switch (pdrv) {
 	case DEV_RAM :
 
@@ -223,7 +245,7 @@ DRESULT disk_ioctl (
 
 		return res;
 	}
-
+#endif
 	return RES_PARERR;
 }
 

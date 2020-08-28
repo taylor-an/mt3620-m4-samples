@@ -68,7 +68,12 @@
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
 
+#if 1
+// 20200828 taylor
+#define FF_CODE_PAGE	437
+#else
 #define FF_CODE_PAGE	932
+#endif
 /* This option specifies the OEM code page to be used on the target system.
 /  Incorrect code page setting can cause a file open failure.
 /
@@ -234,7 +239,12 @@
 /  Note that enabling exFAT discards ANSI C (C89) compatibility. */
 
 
+#if 1
+// 20200828 taylor
+#define FF_FS_NORTC		1
+#else
 #define FF_FS_NORTC		0
+#endif
 #define FF_NORTC_MON	1
 #define FF_NORTC_MDAY	1
 #define FF_NORTC_YEAR	2019
