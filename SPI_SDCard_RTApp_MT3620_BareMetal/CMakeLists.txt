@@ -5,7 +5,12 @@ cmake_minimum_required(VERSION 3.11)
 project(SPI_SDCard_RTApp_MT3620_BareMetal C)
 
 # Create executable
-add_executable(${PROJECT_NAME} main.c SD.c lib/VectorTable.c lib/GPT.c lib/GPIO.c lib/UART.c lib/Print.c lib/SPIMaster.c)
+add_executable(${PROJECT_NAME} main.c SD.c lib/VectorTable.c lib/GPT.c lib/GPIO.c lib/UART.c lib/Print.c lib/SPIMaster.c
+FatFs/ff.c
+FatFs/ffsystem.c
+FatFs/ffunicode.c
+FatFs/diskio.c
+)
 target_link_libraries(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS ${CMAKE_SOURCE_DIR}/linker.ld)
 
