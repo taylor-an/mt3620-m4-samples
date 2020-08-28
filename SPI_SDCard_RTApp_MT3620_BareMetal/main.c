@@ -117,7 +117,12 @@ _Noreturn void RTCoreMain(void)
     UART_Print(debug, "SPI_SDCard_RTApp_MT3620_BareMetal\r\n");
     UART_Print(debug, "App built on: " __DATE__ " " __TIME__ "\r\n");
 
+    #if 1
+    // 20200828 taylor
+    driver = SPIMaster_Open(MT3620_UNIT_ISU2);
+    #else
     driver = SPIMaster_Open(MT3620_UNIT_ISU1);
+    #endif
     if (!driver) {
         UART_Print(debug,
             "ERROR: SPI initialisation failed\r\n");
@@ -125,7 +130,12 @@ _Noreturn void RTCoreMain(void)
     SPIMaster_DMAEnable(driver, false);
 
     // Use CSB for chip select.
+    #if 1
+    // 20200828 taylor
+    SPIMaster_Select(driver, 0);
+    #else
     SPIMaster_Select(driver, 1);
+    #endif
 
     card = SD_Open(driver);
     if (!card) {
@@ -133,7 +143,7 @@ _Noreturn void RTCoreMain(void)
             "ERROR: Failed to open SD card.\r\n");
     }
 
-	UART_Print(debug,
+    UART_Print(debug,
         "Press button A to read block.\r\n");
 
     GPIO_ConfigurePinForInput(buttonAGpio);
