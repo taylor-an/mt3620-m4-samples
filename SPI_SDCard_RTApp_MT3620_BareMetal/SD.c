@@ -1,4 +1,8 @@
 #include "SD.h"
+#if 1
+// 20200831 taylor
+#include "lib/UART.h"
+#endif
 
 // This is the maximum number of SD cards which can be opened at once.
 #define SD_CARD_MAX 4
@@ -101,6 +105,11 @@ typedef struct {
     int32_t status;
     int32_t count;
 } TransferState;
+
+#if 1
+// 20200831 taylor
+extern UART      *debug;
+#endif
 
 static volatile TransferState transferState = {
     .done   = false,
@@ -343,6 +352,84 @@ static bool SD_ReadDataPacket(const SDCard *card, uintptr_t size, void *data)
     return true;
 }
 
+#if 1
+// 20200831 taylor
+static bool SD_WriteDataPacket(const SDCard *card, uintptr_t size, void *data)
+{
+    #define DBG_SD_WRITEDATAPACKET
+    
+    #ifdef DBG_SD_WRITEDATAPACKET
+    UART_Printf(debug,"Start DBG SD_WriteDataPacket %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
+
+    unsigned retries = 65536;
+    uint8_t byte = 0xFF;
+    unsigned i;
+    
+    for (i = 0; (i < retries) && (byte != 0xFF); i++) {
+        if (!SPITransfer__AsyncTimeout(card->interface, &byte, 1, SPI_READ)) {
+            #ifdef DBG_SD_WRITEDATAPACKET
+            UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
+            return false;
+        }
+    }
+
+    byte = 0xFE;
+    
+    if (!SPITransfer__AsyncTimeout(card->interface, &byte, 1, SPI_WRITE)) {
+      #ifdef DBG_SD_WRITEDATAPACKET
+      UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+      #endif
+      return false;
+    }    
+
+    uint8_t *data_byte = data;
+    uintptr_t packet = 16;
+    uintptr_t remain = size;
+    for (remain = size; remain; remain -= packet, data_byte += packet) {
+        if (packet > remain) {
+            packet = remain;
+        }
+
+        if (!SPITransfer__AsyncTimeout(card->interface, data_byte, packet, SPI_WRITE)) {
+            #ifdef DBG_SD_WRITEDATAPACKET
+            UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
+            return false;
+        }
+    }
+
+    uint16_t crc;
+    if (!SPITransfer__AsyncTimeout(card->interface, &crc, sizeof(crc), SPI_READ)) {
+        #ifdef DBG_SD_WRITEDATAPACKET
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+        return false;
+    }
+
+    // TODO: Verify the CRC.
+
+    #if 1
+    // 20200831 taylor
+    for (i = 0; (i < retries) && (byte != 0x05); i++) {
+        if (!SPITransfer__AsyncTimeout(card->interface, &byte, 1, SPI_READ)) {
+            #ifdef DBG_SD_WRITEDATAPACKET
+            UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
+            return false;
+        }
+    }
+    #else
+    // Clock burst is required here to give the card time to recover?
+    SD_ClockBurst(card->interface, 32, false);
+    #endif
+
+    return true;
+}
+
+#endif
+
 static bool SD_ReadCSD(SDCard *card)
 {
     SD_R1 response;
@@ -554,3 +641,41 @@ bool SD_ReadBlock(const SDCard *card, uint32_t addr, void *data)
 
     return SD_ReadDataPacket(card, card->blockLen, data);
 }
+
+#if 1
+// 20200831 taylor
+bool SD_WriteBlock(const SDCard *card, uint32_t addr, void *data)
+{
+    #define DBG_SD_WRITEBLOCK
+
+    #ifdef DBG_SD_WRITEBLOCK
+    UART_Printf(debug,"Start DBG SD_WriteBlock %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
+
+    if (!card || !data) {
+        return false;
+    }
+
+    SD_R1 response;
+    if (!SD_CommandIncomplete(card->interface, WRITE_BLOCK, addr, sizeof(response), &response)) {
+        #ifdef DBG_SD_WRITEBLOCK
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+        return false;
+    }
+
+    if (response.mask != 0x00) {
+        #ifdef DBG_SD_WRITEBLOCK
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+        return false;
+    }
+
+    #ifdef DBG_SD_WRITEBLOCK
+    UART_Print(debug,"End DBG SD_WriteBlock\r\n");
+    #endif
+
+    return SD_WriteDataPacket(card, card->blockLen, data);
+}
+#endif
+
