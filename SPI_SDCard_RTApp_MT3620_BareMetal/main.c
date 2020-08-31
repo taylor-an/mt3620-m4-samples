@@ -22,7 +22,12 @@ static const int buttonPressCheckPeriodMs = 10;
 static void HandleButtonTimerIrq(GPT *);
 static void HandleButtonTimerIrqDeferred(void);
 
+#if 1
+// 20200831 taylor
+UART      *debug  = NULL;
+#else
 static UART      *debug  = NULL;
+#endif
 static SPIMaster *driver = NULL;
 static SDCard    *card   = NULL;
 static GPT *buttonTimeout = NULL;
@@ -69,6 +74,75 @@ static void HandleButtonTimerIrqDeferred(void)
                 }
                 UART_Print(debug, "\r\n");
             }
+
+            #if 1
+            // 20200831 taylor
+
+            // write 0
+
+            memset(buff, 0, blocklen);
+
+            if (!SD_WriteBlock(card, 0, buff)) {
+                UART_Print(debug,
+                    "ERROR: Failed to write first block of SD card\r\n");
+            }
+
+            // read
+
+            memset(buff, 0, blocklen);
+
+            if (!SD_ReadBlock(card, 0, buff)) {
+                UART_Print(debug,
+                    "ERROR: Failed to read first block of SD card\r\n");
+            }
+            else {
+                UART_Print(debug, "SD Card Data:\r\n");
+                uintptr_t i;
+                for (i = 0; i < blocklen; i++) {
+                    UART_PrintHexWidth(debug, buff[i], 2);
+                    UART_Print(debug, ((i % 16) == 15 ? "\r\n" : " "));
+                }
+                if ((blocklen % 16) != 0) {
+                    UART_Print(debug, "\r\n");
+                }
+                UART_Print(debug, "\r\n");
+            }
+
+            // write 0 1 2 3 4 to ...
+            
+            uintptr_t i;
+            for(i=0; i<blocklen; i++)
+            {
+              buff[i] = i;
+            }
+            
+            if (!SD_WriteBlock(card, 0, buff)) {
+                UART_Print(debug,
+                    "ERROR: Failed to write first block of SD card\r\n");
+            }
+
+            // read
+
+            memset(buff, 0, blocklen);
+
+            if (!SD_ReadBlock(card, 0, buff)) {
+                UART_Print(debug,
+                    "ERROR: Failed to read first block of SD card\r\n");
+            }
+            else {
+                UART_Print(debug, "SD Card Data:\r\n");
+                uintptr_t i;
+                for (i = 0; i < blocklen; i++) {
+                    UART_PrintHexWidth(debug, buff[i], 2);
+                    UART_Print(debug, ((i % 16) == 15 ? "\r\n" : " "));
+                }
+                if ((blocklen % 16) != 0) {
+                    UART_Print(debug, "\r\n");
+                }
+                UART_Print(debug, "\r\n");
+            }
+            
+            #endif
         }
 
         prevState = newState;
