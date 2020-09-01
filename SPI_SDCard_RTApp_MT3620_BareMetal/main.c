@@ -16,16 +16,30 @@
 
 #include "SD.h"
 
+#if 1
+// 20200901 taylor
+#include "fatfs.h"
+#include "fatfs_sd.h"
+#endif
+
 
 static const uint32_t buttonAGpio = 12;
 static const int buttonPressCheckPeriodMs = 10;
 static void HandleButtonTimerIrq(GPT *);
 static void HandleButtonTimerIrqDeferred(void);
 
+#if 1
+// 20200901 taylor
+UART      *debug  = NULL;
+SPIMaster *driver = NULL;
+SDCard    *card   = NULL;
+GPT *buttonTimeout = NULL;
+#else
 static UART      *debug  = NULL;
 static SPIMaster *driver = NULL;
 static SDCard    *card   = NULL;
 static GPT *buttonTimeout = NULL;
+#endif
 
 typedef struct CallbackNode {
     bool enqueued;
@@ -136,13 +150,14 @@ _Noreturn void RTCoreMain(void)
     #else
     SPIMaster_Select(driver, 1);
     #endif
-
+    
     card = SD_Open(driver);
     if (!card) {
         UART_Print(debug,
             "ERROR: Failed to open SD card.\r\n");
+        while(1);
     }
-
+    
     UART_Print(debug,
         "Press button A to read block.\r\n");
 
@@ -158,6 +173,45 @@ _Noreturn void RTCoreMain(void)
                                   GPT_UNITS_MILLISEC, &HandleButtonTimerIrq)) != ERROR_NONE) {
         UART_Printf(debug, "ERROR: Starting timer (%ld)\r\n", error);
     }
+                                  
+    #if 1
+    // 20200901 taylor
+    MX_FATFS_Init();
+    #endif
+
+    FATFS fs;
+    FIL fsrc;
+	  FIL* fp = &fsrc;
+  	FRESULT res;
+  	
+  	res = f_mount(&fs, "", 0);
+  	if(res != FR_OK)
+  	{
+  		UART_Printf(debug, "Mount Error\r\n");
+#if 0
+  		res = f_mkfs(DISK_DRIVE, 0, 512);
+  		if(res  != FR_OK)
+  		{
+  			debugprintf("f_mkfs Error res = %d\r\n", res);
+  			while(1);
+  		}
+  		debugstring("f_mkfs ok\r\n");
+#else
+  		while(1);
+#endif
+  	}
+
+    #if 0
+    UART_Printf(debug, "%s : %d \r\n", __FILE__, __LINE__);
+    while(1);
+    #endif
+
+    res = f_open(fp, "test.txt", FA_READ);
+    if(res != FR_OK)
+		{
+		  UART_Printf(debug, "f_open Error: %s : %d \r\n", __FILE__, __LINE__);
+		  while(1);
+		}
 
     for (;;) {
         __asm__("wfi");

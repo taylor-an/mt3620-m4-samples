@@ -88,13 +88,24 @@ typedef struct __attribute__((__packed__)) {
     };
 } SD_R7;
 
-
+#if 1
+// 20200901 taylor
+#if 0
 struct SDCard {
     SPIMaster *interface;
     uint32_t   blockLen;
     uint32_t   tranSpeed;
     uint32_t   maxTranSpeed;
 };
+#endif
+#else
+struct SDCard {
+    SPIMaster *interface;
+    uint32_t   blockLen;
+    uint32_t   tranSpeed;
+    uint32_t   maxTranSpeed;
+};
+#endif
 
 typedef struct {
     bool    done;
@@ -148,6 +159,66 @@ typedef enum {
     SPI_WRITE = 1
 } SPI_TRANSFER_TYPE;
 
+#if 0
+// 20200901 taylor
+bool SPITransfer__AsyncTimeout(
+    SPIMaster         *interface,
+    void              *data,
+    uintptr_t          length,
+    SPI_TRANSFER_TYPE  transferType)
+{
+    if (!interface) {
+        return false;
+    }
+
+    SPITransfer transfer = {
+        .writeData = NULL,
+        .readData  = NULL,
+        .length    = length,
+    };
+
+    int32_t status;
+    switch (transferType) {
+    case SPI_READ:
+        transfer.readData = data;
+        status = SPIMaster_TransferSequentialAsync(interface, &transfer, 1, transferDoneCallback);
+        break;
+
+    case SPI_WRITE:
+        transfer.writeData = data;
+        status = SPIMaster_TransferSequentialAsync(interface, &transfer, 1, transferDoneCallback);
+        break;
+
+    default:
+        return false;
+    }
+
+    if (status != ERROR_NONE) {
+        return false;
+    }
+
+    GPT_StartTimeout(timer, SPI_SD_TIMEOUT, GPT_UNITS_SECOND, NULL);
+
+    while (!transferState.done) {
+        __asm__("wfi");
+        if (!GPT_IsEnabled(timer)) {
+            // Timed out, so cancel
+            SPIMaster_TransferCancel(interface);
+            break;
+        }
+    }
+
+    status = transferState.status;
+    transferStateReset();
+
+    if (status != ERROR_NONE) {
+        return false;
+    }
+
+    return true;
+}
+
+#else
 static bool SPITransfer__AsyncTimeout(
     SPIMaster         *interface,
     void              *data,
@@ -204,6 +275,7 @@ static bool SPITransfer__AsyncTimeout(
 
     return true;
 }
+#endif
 
 static bool SD_ClockBurst(SPIMaster* interface, unsigned cycles, bool select)
 {
