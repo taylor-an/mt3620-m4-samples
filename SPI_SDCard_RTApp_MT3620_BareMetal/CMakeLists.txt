@@ -9,7 +9,6 @@ add_executable(${PROJECT_NAME}
 	main.c
 	SD.c
 	fatfs.c
-	fatfs_sd.c
 	general_sdcard.c
 	user_diskio.c
 

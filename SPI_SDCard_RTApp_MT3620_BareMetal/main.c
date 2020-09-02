@@ -19,7 +19,7 @@
 #if 1
 // 20200901 taylor
 #include "fatfs.h"
-#include "fatfs_sd.h"
+//#include "fatfs_sd.h"
 #endif
 
 
@@ -66,6 +66,42 @@ static void HandleButtonTimerIrqDeferred(void)
     if (newState != prevState) {
         bool pressed = !newState;
         if (pressed) {
+          #if 1
+          // 20200901 taylor
+          FATFS fs;
+          FIL fsrc;
+      	  FIL* fp = &fsrc;
+        	FRESULT res;
+        	
+        	res = f_mount(&fs, "", 0);
+        	if(res != FR_OK)
+        	{
+        		UART_Printf(debug, "Mount Error\r\n");
+#if 0
+        		res = f_mkfs(DISK_DRIVE, 0, 512);
+        		if(res  != FR_OK)
+        		{
+        			debugprintf("f_mkfs Error res = %d\r\n", res);
+        			while(1);
+        		}
+        		debugstring("f_mkfs ok\r\n");
+#else
+        		while(1);
+#endif
+        	}
+
+          #if 0
+          UART_Printf(debug, "%s : %d \r\n", __FILE__, __LINE__);
+          while(1);
+          #endif
+
+          res = f_open(fp, "test.txt", FA_READ);
+          if(res != FR_OK)
+      		{
+      		  UART_Printf(debug, "f_open Error: %s : %d \r\n", __FILE__, __LINE__);
+      		  //while(1);
+      		}
+          #else
             uintptr_t blocklen = SD_GetBlockLen(card);
             uint8_t buff[blocklen];
             if (!SD_ReadBlock(card, 0, buff)) {
@@ -83,6 +119,7 @@ static void HandleButtonTimerIrqDeferred(void)
                 }
                 UART_Print(debug, "\r\n");
             }
+          #endif
         }
 
         prevState = newState;
@@ -150,13 +187,18 @@ _Noreturn void RTCoreMain(void)
     #else
     SPIMaster_Select(driver, 1);
     #endif
-    
+
+    //#define RUN_ORIGIN
+
+    #ifdef RUN_ORIGIN
     card = SD_Open(driver);
     if (!card) {
         UART_Print(debug,
             "ERROR: Failed to open SD card.\r\n");
         while(1);
     }
+    while(1);
+    #endif
     
     UART_Print(debug,
         "Press button A to read block.\r\n");
@@ -179,6 +221,7 @@ _Noreturn void RTCoreMain(void)
     MX_FATFS_Init();
     #endif
 
+    #if 1
     FATFS fs;
     FIL fsrc;
 	  FIL* fp = &fsrc;
@@ -206,12 +249,59 @@ _Noreturn void RTCoreMain(void)
     while(1);
     #endif
 
-    res = f_open(fp, "test.txt", FA_READ);
+    res = f_open(fp, "test.txt", FA_READ|FA_WRITE);
     if(res != FR_OK)
 		{
-		  UART_Printf(debug, "f_open Error: %s : %d \r\n", __FILE__, __LINE__);
+		  UART_Printf(debug, "f_open Error: %d %s : %d \r\n", res, __FILE__, __LINE__);
+      if(res == FR_NO_FILESYSTEM)
+      {
+        BYTE work[4096];
+        res = f_mkfs("", 0, 512*2, work, sizeof(work));
+    		if(res  != FR_OK)
+    		{
+    			UART_Printf(debug, "f_mkfs Error: %d %s : %d \r\n", res, __FILE__, __LINE__);
+    			while(1);
+    		}
+
+        res = f_open(fp, "test.txt", FA_READ);
+        if(res != FR_OK)
+        {
+          UART_Printf(debug, "f_open Error: %d %s : %d \r\n", res, __FILE__, __LINE__);
+        }
+        while(1);
+      }
+      else if(res == FR_NO_FILE)
+      {
+        res = f_open(fp, "test.txt", FA_READ|FA_WRITE|FA_CREATE_NEW);
+        if(res != FR_OK)
+        {
+          UART_Printf(debug, "f_open Error: %d %s : %d \r\n", res, __FILE__, __LINE__);
+        }
+        f_close(fp);
+        UART_Printf(debug, "f_open finished : %d %s : %d \r\n", res, __FILE__, __LINE__);
+      }
 		  while(1);
 		}
+    UART_Printf(debug, "f_open finished: %d %s : %d \r\n", res, __FILE__, __LINE__);
+
+    int bw;
+    char string[100];
+    f_read(fp, string, sizeof(string), &bw);
+    UART_Printf(debug, "f_read finished: %s %s : %d \r\n", string, __FILE__, __LINE__);
+    
+    f_lseek(fp, f_size(fp));
+    
+    f_write(fp, "Hello Wiznet", sizeof("Hello Wiznet"), &bw);
+    UART_Printf(debug, "f_write finished %d written: %s : %d \r\n", bw, __FILE__, __LINE__);
+
+    f_read(fp, string, sizeof(string), &bw);
+    UART_Printf(debug, "f_read finished: %s %s : %d \r\n", string, __FILE__, __LINE__);
+    
+	  f_close(fp);
+
+    
+    
+    #endif
 
     for (;;) {
         __asm__("wfi");
