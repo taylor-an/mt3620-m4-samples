@@ -4,6 +4,8 @@
 cmake_minimum_required(VERSION 3.11)
 project(SPI_SDCard_RTApp_MT3620_BareMetal C)
 
+add_link_options(-specs=nano.specs -specs=nosys.specs)
+
 # Create executable
 add_executable(${PROJECT_NAME}
 	main.c

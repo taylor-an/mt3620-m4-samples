@@ -393,15 +393,22 @@ static bool SD_Command(SPIMaster *interface, SD_CMD cmd, uint32_t argument,
 // 20200902 taylor
 static bool SD_ReadDataPacket(SPIMaster *interface, uintptr_t size, void *data)
 {
+    #define DBG_SD_READDATAPACKET
     unsigned retries = 65536;
     uint8_t byte = 0xFF;
     unsigned i;
     for (i = 0; (i < retries) && (byte == 0xFF); i++) {
         if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
+            #ifdef DBG_SD_READDATAPACKET
+            UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
             return false;
         }
     }
     if (byte != 0xFE) {
+        #ifdef DBG_SD_READDATAPACKET
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
         return false;
     }
 
@@ -414,12 +421,18 @@ static bool SD_ReadDataPacket(SPIMaster *interface, uintptr_t size, void *data)
         }
 
         if (!SPITransfer__AsyncTimeout(interface, data_byte, packet, SPI_READ)) {
+            #ifdef DBG_SD_READDATAPACKET
+            UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
             return false;
         }
     }
 
     uint16_t crc;
     if (!SPITransfer__AsyncTimeout(interface, &crc, sizeof(crc), SPI_READ)) {
+        #ifdef DBG_SD_READDATAPACKET
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
         return false;
     }
 
@@ -732,6 +745,9 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
 
     #if 1
     // 20200831 taylor
+    #if 0
+    SD_ClockBurst(interface, 32, true);
+
     for (i = 0; (i < retries) && (byte != 0x05); i++) {
         if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
             #ifdef DBG_SD_WRITEDATAPACKET
@@ -740,6 +756,21 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
             return false;
         }
     }
+    #else
+            
+    for (i = 0; (i < retries) && (byte != 0x05); i++) {
+        if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
+            #ifdef DBG_SD_WRITEDATAPACKET
+            UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
+            return false;
+        }
+        //UART_Printf(debug,"retries %d/%d %s(%d)\r\n", i, retries, __FILE__, __LINE__);
+    }
+
+    SD_ClockBurst(interface, 32, true);
+    #endif
+    
     #else
     // Clock burst is required here to give the card time to recover?
     SD_ClockBurst(card->interface, 32, false);
@@ -791,16 +822,27 @@ bool SD_WriteBlock(SPIMaster *interface, uint32_t addr, void *data)
 // 20200902 taylor
 bool SD_ReadBlock(SPIMaster *interface, uint32_t addr, void *data)
 {
+    #define DBG_SD_READBLOCK
+    
     if (!interface || !data) {
+        #ifdef DBG_SD_READBLOCK
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
         return false;
     }
 
     SD_R1 response;
     if (!SD_CommandIncomplete(interface, READ_SINGLE_BLOCK, addr, sizeof(response), &response)) {
+        #ifdef DBG_SD_READBLOCK
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
         return false;
     }
 
     if (response.mask != 0x00) {
+        #ifdef DBG_SD_READBLOCK
+        UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
         return false;
     }
 
@@ -944,6 +986,8 @@ static void SPI_RxBytePtr(uint8_t *buff)
 /* power on */
 static void SD_PowerOn(void) 
 {
+    //#define DBG_SD_POWERON
+    
 	uint8_t args[6];
 	int32_t cnt = 0x1FFF;
   bool ret;
@@ -960,7 +1004,9 @@ static void SD_PowerOn(void)
     {
       break;
     }
+    #ifdef DBG_SD_POWERON
     UART_Printf(debug, "SD_ClockBurst Error 0x%x %s : %d \r\n", __FILE__, __LINE__);
+    #endif
     if (i >= retries)
     {
       UART_Printf(debug, "SD_ClockBurst Failed 0x%x %s : %d \r\n", __FILE__, __LINE__);
@@ -986,7 +1032,9 @@ static void SD_PowerOn(void)
     {
       break;
     }
+    #ifdef DBG_SD_POWERON
     UART_Printf(debug, "SD_GoIdleState Error 0x%x %s : %d \r\n", __FILE__, __LINE__);
+    #endif
     if (i >= retries)
     {
       UART_Printf(debug, "SD_GoIdleState Failed 0x%x %s : %d \r\n", __FILE__, __LINE__);
@@ -1035,10 +1083,14 @@ static void SD_PowerOn(void)
 
 DSTATUS SD_disk_initialize (BYTE drv)
 {
+    //#define DBG_SD_DISK_INITIALIZE
+    
   uint8_t n, type, ocr[4];
   uint32_t ret;
 
+    #ifdef DBG_SD_DISK_INITIALIZE
   UART_Printf(debug, "SD_disk_initialize %s : %d \r\n", __FILE__, __LINE__);
+    #endif
 
 	/* single drive, drv should be 0 */
 	if(drv) return STA_NOINIT;
@@ -1048,7 +1100,9 @@ DSTATUS SD_disk_initialize (BYTE drv)
 
   // Configure SPI Master to 400 kHz.
   ret = SPIMaster_Configure(driver, 0, 0, 400000);
+    #ifdef DBG_SD_DISK_INITIALIZE
   UART_Printf(debug, "SPIMaster_Configure ret = %d %s : %d \r\n", ret, __FILE__, __LINE__);
+    #endif
 
   #if 1
   // 20200902 taylor
@@ -1081,20 +1135,24 @@ DSTATUS SD_disk_initialize (BYTE drv)
       return false;
   }
 
+    #ifdef DBG_SD_DISK_INITIALIZE
   UART_Printf(debug, "response7 0x%x %s : %d \r\n", response7.mask, __FILE__, __LINE__);
   UART_Printf(debug, "commandVersion 0x%x %s : %d \r\n", response7.commandVersion, __FILE__, __LINE__);
   UART_Printf(debug, "voltageAccepted 0x%x %s : %d \r\n", response7.voltageAccepted, __FILE__, __LINE__);
   UART_Printf(debug, "checkPattern 0x%x %s : %d \r\n", response7.checkPattern, __FILE__, __LINE__);  
+  #endif
 
   ocr[3] = (response7.mask>>24)&0xff;
   ocr[2] = (response7.mask>>16)&0xff;
   ocr[1] = (response7.mask>>8)&0xff;
   ocr[0] = response7.mask&0xff;
 
+#ifdef DBG_SD_DISK_INITIALIZE
   UART_Printf(debug, "ocr[3] 0x%x %s : %d \r\n", ocr[3], __FILE__, __LINE__);  
   UART_Printf(debug, "ocr[2] 0x%x %s : %d \r\n", ocr[2], __FILE__, __LINE__);  
   UART_Printf(debug, "ocr[1] 0x%x %s : %d \r\n", ocr[1], __FILE__, __LINE__);  
   UART_Printf(debug, "ocr[0] 0x%x %s : %d \r\n", ocr[0], __FILE__, __LINE__);  
+  #endif
 
   SD_R1 response = response7.r1;
   if (response.mask == 0x01) {
@@ -1105,7 +1163,9 @@ DSTATUS SD_disk_initialize (BYTE drv)
       UART_Printf(debug, "Error %s : %d \r\n", __FILE__, __LINE__);
   }
 
+    #ifdef DBG_SD_DISK_INITIALIZE
   UART_Printf(debug, "response 0x%x %s : %d \r\n", response.mask, __FILE__, __LINE__);
+    #endif
 
   /* voltage range 2.7-3.6V */
 	if (ocr[2] == 0x01 && ocr[3] == 0xAA)
@@ -1121,22 +1181,28 @@ DSTATUS SD_disk_initialize (BYTE drv)
         return false;
     }
 
+    #ifdef DBG_SD_DISK_INITIALIZE
     UART_Printf(debug, "response3.ocr 0x%x %s : %d \r\n", response3.ocr, __FILE__, __LINE__);
     UART_Printf(debug, "response3.r1.mask 0x%x %s : %d \r\n", response3.r1.mask, __FILE__, __LINE__);
+    #endif
 
     ocr[3] = (response3.ocr>>24)&0xff;
     ocr[2] = (response3.ocr>>16)&0xff;
     ocr[1] = (response3.ocr>>8)&0xff;
     ocr[0] = response3.ocr&0xff;
 
+    #ifdef DBG_SD_DISK_INITIALIZE
     UART_Printf(debug, "ocr[3] 0x%x %s : %d \r\n", ocr[3], __FILE__, __LINE__);
     UART_Printf(debug, "ocr[2] 0x%x %s : %d \r\n", ocr[2], __FILE__, __LINE__);
     UART_Printf(debug, "ocr[1] 0x%x %s : %d \r\n", ocr[1], __FILE__, __LINE__);
     UART_Printf(debug, "ocr[0] 0x%x %s : %d \r\n", ocr[0], __FILE__, __LINE__);
+    #endif
 
     /* SDv2 (HC or SC) */
 		type = (ocr[0] & 0x40) ? CT_SD2 | CT_BLOCK : CT_SD2;
+    #ifdef DBG_SD_DISK_INITIALIZE
     UART_Printf(debug, "type 0x%x %s : %d \r\n", type, __FILE__, __LINE__);
+    #endif
   }
 
   CardType = type;
@@ -1165,7 +1231,11 @@ DSTATUS SD_disk_initialize (BYTE drv)
 
 DSTATUS SD_disk_status (BYTE pdrv)
 {
+    //#define DBG_SD_DISK_STATUS
+
+    #ifdef DBG_SD_DISK_STATUS
   UART_Printf(debug, "SD_disk_status %s : %d \r\n", __FILE__, __LINE__);
+    #endif
 
   if (pdrv) return STA_NOINIT;
 	return Stat;
@@ -1174,7 +1244,11 @@ DSTATUS SD_disk_status (BYTE pdrv)
 
 DRESULT SD_disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count)
 {
-  UART_Printf(debug, "SD_disk_read %s : %d \r\n", __FILE__, __LINE__);
+    #define DBG_SD_DISK_READ
+
+    #ifdef DBG_SD_DISK_READ
+  UART_Printf(debug, "Start SD_disk_read %s : %d \r\n", __FILE__, __LINE__);
+    #endif
 
   /* pdrv should be 0 */
 	if (pdrv || !count) return RES_PARERR;
@@ -1187,20 +1261,34 @@ DRESULT SD_disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count)
 
 	if (count == 1)
 	{
+	#ifdef DBG_SD_DISK_READ
+      UART_Printf(debug, "count %d sector %d %s : %d \r\n", count, sector, __FILE__, __LINE__);
+    #endif
 		/* READ_SINGLE_BLOCK */
 		//if ((SD_SendCmd(CMD17, sector) == 0) && SD_RxDataBlock(buff, 512)) count = 0;
-    if(true == SD_ReadBlock(driver, sector, buff))
-    {
-      UART_Printf(debug, "SD_ReadBlock finished %s : %d \r\n", __FILE__, __LINE__);
-      count = 0;
-    }
-    else
-    {
-      UART_Printf(debug, "SD_ReadBlock failed %s : %d \r\n", __FILE__, __LINE__);
-    }
+        if(true == SD_ReadBlock(driver, sector, buff))
+        {
+#ifdef DBG_SD_DISK_READ
+            UART_Printf(debug, "SD_ReadBlock finished %s : %d \r\n", __FILE__, __LINE__);
+#endif
+            count = 0;
+        }
+        else
+        {
+            UART_Printf(debug, "SD_ReadBlock failed %s : %d \r\n", __FILE__, __LINE__);
+        }
 	}
 	else
 	{
+	#ifdef DBG_SD_DISK_READ
+      UART_Printf(debug, "count %d %s : %d \r\n", count, __FILE__, __LINE__);
+    #endif
+    
+        #ifdef DBG_SD_DISK_READ
+        UART_Printf(debug, "End SD_disk_read %s : %d \r\n", __FILE__, __LINE__);
+        #endif
+    
+        return RES_ERROR;
 	#if 0
 		/* READ_MULTIPLE_BLOCK */
 		if (SD_SendCmd(CMD18, sector) == 0)
@@ -1216,13 +1304,21 @@ DRESULT SD_disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count)
   #endif
 	}
 
+    #ifdef DBG_SD_DISK_READ
+    UART_Printf(debug, "End SD_disk_read %s : %d \r\n\r\n", __FILE__, __LINE__);
+    #endif
+
 	return count ? RES_ERROR : RES_OK;
 
 }
 
 DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count)
 {
-  UART_Printf(debug, "SD_disk_write %s : %d \r\n", __FILE__, __LINE__);
+    #define DBG_SD_DISK_WRITE
+
+    #ifdef DBG_SD_DISK_WRITE
+    UART_Printf(debug, "Start SD_disk_write %s : %d \r\n", __FILE__, __LINE__);
+    #endif
 
   /* pdrv should be 0 */
 	if (pdrv || !count) return RES_PARERR;
@@ -1238,10 +1334,16 @@ DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count)
 
 	if (count == 1)
 	{
+	#ifdef DBG_SD_DISK_WRITE
+      UART_Printf(debug, "count %d sector %d %s : %d \r\n", count, sector, __FILE__, __LINE__);
+    #endif
+    
 	  #if 1
     if(true == SD_WriteBlock(driver, sector, buff))
     {
+    #ifdef DBG_SD_DISK_WRITE
       UART_Printf(debug, "SD_WriteBlock finished %s : %d \r\n", __FILE__, __LINE__);
+    #endif
       count = 0;
     }
     else
@@ -1256,6 +1358,14 @@ DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count)
 	}
 	else
 	{
+	#ifdef DBG_SD_DISK_WRITE
+      UART_Printf(debug, "count %d %s : %d \r\n", count, __FILE__, __LINE__);
+    #endif
+        #ifdef DBG_SD_DISK_WRITE
+        UART_Printf(debug, "End SD_disk_write %s : %d \r\n", __FILE__, __LINE__);
+        #endif
+        
+        return RES_ERROR;
 	#if 0
 		/* WRITE_MULTIPLE_BLOCK */
 		if (CardType & CT_SD1)
@@ -1280,13 +1390,21 @@ DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count)
     #endif
 	}  
 
+    #ifdef DBG_SD_DISK_WRITE
+    UART_Printf(debug, "End SD_disk_write %s : %d \r\n\r\n", __FILE__, __LINE__);
+    #endif
+
 	return count ? RES_ERROR : RES_OK;
 
 }
 
 DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff)
 {
+    //#define DBG_SD_DISK_IOCTL
+
+    #ifdef DBG_SD_DISK_IOCTL
   UART_Printf(debug, "SD_disk_ioctl %s : %d \r\n", __FILE__, __LINE__);
+    #endif
 
   DRESULT res;
 	uint8_t n, csd[16], *ptr = buff;
@@ -1297,7 +1415,9 @@ DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff)
 	if (pdrv) return RES_PARERR;
 	res = RES_ERROR;
 
+    #ifdef DBG_SD_DISK_IOCTL
   UART_Printf(debug, "cmd 0x%x %s : %d \r\n", cmd, __FILE__, __LINE__);
+    #endif
 
 	if (cmd == CTRL_POWER)
 	{
@@ -1359,10 +1479,32 @@ DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff)
       };
       unsigned tranSpeedValue = tranSpeedValueTable[tranSpeedValueRaw];
 
+      #if 0
+    // 20200902 taylor
+
+    card->interface    = interface;
+    card->blockLen     = 512;
+    card->maxTranSpeed = 400000;
+    card->tranSpeed    = 400000;
+
+    if (SD_ReadCSD(card) && (card->maxTranSpeed != card->tranSpeed)) {
+        if (SPIMaster_Configure(card->interface, 0, 0, card->maxTranSpeed) == ERROR_NONE) {
+            card->tranSpeed = card->maxTranSpeed;
+        }
+    }
+    #endif
+
       if ((tranSpeedValue != 0)
           && ((tranSpeedRaw & 0x80) == 0)) {
           #if 1
+          #ifdef DBG_SD_DISK_IOCTL
           UART_Printf(debug, "maxTranSpeed 0x%x %s : %d \r\n", tranSpeedValue * tranSpeedUnit, __FILE__, __LINE__);
+          #endif
+
+        if (SPIMaster_Configure(driver, 0, 0, tranSpeedValue * tranSpeedUnit) != ERROR_NONE)
+        {
+            UART_Printf(debug, "SPIMaster_Configure failed %s : %d \r\n", __FILE__, __LINE__);
+        }
           #else
           card->maxTranSpeed = ;
           #endif
@@ -1395,7 +1537,17 @@ DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff)
 			res = RES_OK;
 			break;
 		case CTRL_SYNC:
-      #if 0
+      #if 1
+            if(SD_ClockBurst(driver, 74, true))
+            {
+                res = RES_OK;
+            }
+            else
+            {
+                UART_Printf(debug, "CTRL_SYNC failed %s : %d \r\n", __FILE__, __LINE__);
+            }
+      #else
+      
 			if (SD_ReadyWait() == 0xFF) res = RES_OK;
       #endif
 			break;
