@@ -221,7 +221,58 @@ _Noreturn void RTCoreMain(void)
             "ERROR: Failed to open SD card.\r\n");
         while(1);
     }
+
+    uint8_t buff[512];
+    uint8_t buffw[512];
+    uint32_t i, j, k, l;
+
+    for (i = 0; i < 512; i++)
+    {
+        buffw[i] = i;
+    }
+
+    for (i = 0; i < 0x762c00; i+=100)
+    //for (i = 0; i < 5; i++)
+    {
+        memset(buff, 0, sizeof(buff));
+        
+        if (!SD_WriteBlock(driver, i, buffw)) {
+            UART_Printf(debug,
+                "ERROR: Failed to write %d block of SD card\r\n", i);
+            while (1);
+        }
+
+        if (!SD_ReadBlock(driver, i, buff)) {
+            UART_Printf(debug,
+                "ERROR: Failed to read %d block of SD card\r\n", i);
+            while (1);
+        }
+        else {
+            UART_Printf(debug, "SD Card Data block %d:\r\n", i);
+#if 1
+            for (j = 0; j < 512; j++)
+            {
+                if (buffw[j] != buff[j])
+                {
+                    UART_Printf(debug, "buffw[%d] %d != buff[%d] %d\r\n", j, buffw[j], j, buff[j]);
+                }
+            }
+
+#if 0
+            for (k = 0; k < 100; k++)
+            {
+                for (l = 0; l < 10000; l++);
+            }
+#endif
+#endif
+        }
+    }
+    UART_Printf(debug,
+        "Done\r\n");
+    
     while(1);
+
+    
     #endif
     
     UART_Print(debug,
@@ -274,19 +325,33 @@ _Noreturn void RTCoreMain(void)
 	if(res != FR_OK)
 	{
 		UART_Printf(debug, "Mount Error\r\n");
-#if 0
-		res = f_mkfs(0, 0, 512);
+#if 1
+        BYTE work[4096];
+		res = f_mkfs(0, 2, 4096, work, sizeof(work));
 		if(res  != FR_OK)
 		{
 			UART_Printf(debug, "f_mkfs Error res = %d\r\n", res);
 			while(1);
 		}
 		UART_Printf(debug, "f_mkfs ok\r\n");
+        while (1);
 #else
 		while(1);
 #endif
 	}
 	UART_Printf(debug, "=================Completed\r\n");
+    
+#if 1
+    BYTE work[4096];
+    res = f_mkfs("", 0, 512, work, sizeof(work));
+    if (res != FR_OK)
+    {
+        UART_Printf(debug, "f_mkfs Error res = %d\r\n", res);
+        while (1);
+    }
+    UART_Printf(debug, "f_mkfs ok\r\n");
+    while (1);
+#endif
     
     #if 0
 
@@ -333,6 +398,8 @@ _Noreturn void RTCoreMain(void)
 	
 	filewrite(0, TEST_FILE, "hello world\r\n");
 	UART_Printf(debug, "=================Completed\r\n");
+
+    while(1);
 	//================================================================================
 
 	//================================================================================
@@ -599,6 +666,12 @@ void filewrite(int drive, char* filename, char* text)
     
     UART_Printf(debug, "> %s\r\n", pngbuf);
     #endif
+
+    int i, k;
+    for (i = 0; i < 1000; i++)
+    {
+        for (k = 0; k < 1000; k++);
+    }
     
 	res = f_close(fp);
     if(res != FR_OK)
