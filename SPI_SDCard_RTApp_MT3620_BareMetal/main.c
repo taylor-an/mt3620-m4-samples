@@ -59,6 +59,7 @@ static void HandleButtonTimerIrqDeferred(void)
         if (pressed) {
             uintptr_t blocklen = SD_GetBlockLen(card);
             uint8_t buff[blocklen];
+#if 0
             if (!SD_ReadBlock(card, 0, buff)) {
                 UART_Print(debug,
                     "ERROR: Failed to read first block of SD card\r\n");
@@ -75,73 +76,66 @@ static void HandleButtonTimerIrqDeferred(void)
                 UART_Print(debug, "\r\n");
             }
 
-            #if 1
-            // 20200831 taylor
+#else
+// 20200831 taylor
 
-            // write 0
+            uint32_t i, j, k;
+            uint8_t buffw[blocklen];
 
-            memset(buff, 0, blocklen);
-
-            if (!SD_WriteBlock(card, 0, buff)) {
-                UART_Print(debug,
-                    "ERROR: Failed to write first block of SD card\r\n");
-            }
-
-            // read
-
-            memset(buff, 0, blocklen);
-
-            if (!SD_ReadBlock(card, 0, buff)) {
-                UART_Print(debug,
-                    "ERROR: Failed to read first block of SD card\r\n");
-            }
-            else {
-                UART_Print(debug, "SD Card Data:\r\n");
-                uintptr_t i;
-                for (i = 0; i < blocklen; i++) {
-                    UART_PrintHexWidth(debug, buff[i], 2);
-                    UART_Print(debug, ((i % 16) == 15 ? "\r\n" : " "));
-                }
-                if ((blocklen % 16) != 0) {
-                    UART_Print(debug, "\r\n");
-                }
-                UART_Print(debug, "\r\n");
-            }
-
-            // write 0 1 2 3 4 to ...
-            
-            uintptr_t i;
-            for(i=0; i<blocklen; i++)
+            for (j = 0; j < 1000; j++)
             {
-              buff[i] = i;
-            }
-            
-            if (!SD_WriteBlock(card, 0, buff)) {
-                UART_Print(debug,
-                    "ERROR: Failed to write first block of SD card\r\n");
-            }
+                // write 0
 
-            // read
+                memset(buffw, 0, blocklen);
 
-            memset(buff, 0, blocklen);
-
-            if (!SD_ReadBlock(card, 0, buff)) {
-                UART_Print(debug,
-                    "ERROR: Failed to read first block of SD card\r\n");
-            }
-            else {
-                UART_Print(debug, "SD Card Data:\r\n");
-                uintptr_t i;
-                for (i = 0; i < blocklen; i++) {
-                    UART_PrintHexWidth(debug, buff[i], 2);
-                    UART_Print(debug, ((i % 16) == 15 ? "\r\n" : " "));
+                if (!SD_WriteBlock(card, j, buffw)) {
+                    UART_Print(debug,
+                        "ERROR: Failed to write first block of SD card\r\n");
                 }
-                if ((blocklen % 16) != 0) {
-                    UART_Print(debug, "\r\n");
+
+                // read
+
+                memset(buff, 0, blocklen);
+
+                if (!SD_ReadBlock(card, j, buff)) {
+                    UART_Print(debug,
+                        "ERROR: Failed to read first block of SD card\r\n");
                 }
-                UART_Print(debug, "\r\n");
+
+                // write 0 1 2 3 4 to ...
+
+                for (i = 0; i < blocklen; i++)
+                {
+                    buffw[i] = i;
+                }
+
+                if (!SD_WriteBlock(card, j, buffw)) {
+                    UART_Print(debug,
+                        "ERROR: Failed to write first block of SD card\r\n");
+                }
+
+                // read
+
+                memset(buff, 0, blocklen);
+
+                if (!SD_ReadBlock(card, j, buff)) {
+                    UART_Print(debug,
+                        "ERROR: Failed to read first block of SD card\r\n");
+                }
+                else {
+                    UART_Printf(debug, "SD Card Data Compare Block %d:\r\n", j);
+
+                    for (k = 0; k < blocklen; k++)
+                    {
+                        if (buffw[k] != buff[k])
+                        {
+                            UART_Printf(debug, "buffw[%d] 0x%x != buff[%d] 0x%x\r\n", k, buffw[k], k, buff[k]);
+                            while (1);
+                        }
+                    }
+                }
             }
-            
+            UART_Printf(debug, "Done\r\n");
             #endif
         }
 

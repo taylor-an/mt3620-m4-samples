@@ -400,6 +400,19 @@ static bool SD_WriteDataPacket(const SDCard *card, uintptr_t size, void *data)
         }
     }
 
+#if 1
+    for (i = 0; (i < retries) && (byte != 0x05); i++) {
+        if (!SPITransfer__AsyncTimeout(card->interface, &byte, 1, SPI_READ)) {
+#ifdef DBG_SD_WRITEDATAPACKET
+            UART_Printf(debug, "false %s(%d)\r\n", __FILE__, __LINE__);
+#endif
+            return false;
+        }
+    }
+
+    SD_ClockBurst(card->interface, 8, true);
+
+#else
     uint16_t crc;
     if (!SPITransfer__AsyncTimeout(card->interface, &crc, sizeof(crc), SPI_READ)) {
         #ifdef DBG_SD_WRITEDATAPACKET
@@ -424,7 +437,7 @@ static bool SD_WriteDataPacket(const SDCard *card, uintptr_t size, void *data)
     // Clock burst is required here to give the card time to recover?
     SD_ClockBurst(card->interface, 32, false);
     #endif
-
+#endif
     return true;
 }
 
