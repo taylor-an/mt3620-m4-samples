@@ -1,0 +1,1180 @@
+(14:09:27.962) <NUL>--------------------------------
+(14:09:31.000) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:09:31.000) App built on: Sep  8 2020 14:06:55
+(14:09:31.000) Press button A to read block.
+(14:09:31.000) =================
+(14:09:31.000) 1 Mount Drive
+(14:09:31.000) =================
+(14:09:31.000) =================Completed
+(14:09:31.000) =================
+(14:09:31.000) 2 Print Drive
+(14:09:31.000) =================
+(14:09:31.093) SD_disk_ioctl ../../SD.c : 1739 
+(14:09:31.096) cmd 0x2 ../../SD.c : 1752 
+(14:09:31.096) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:09:31.137) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:09:31.137) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:09:31.156) [D]System Volume Information
+(14:09:31.156) =================Completed
+(14:09:31.156) =================
+(14:09:31.156) 3 File Write
+(14:09:31.156) =================
+(14:09:31.156) 0:20200903-3.txt
+(14:09:31.156) Start SD_disk_write ../../SD.c : 1623 
+(14:09:31.156) count 1 sector 16384 ../../SD.c : 1641 
+(14:09:31.156) Start DBG SD_WriteBlock addr 0x4000 ../../SD.c(1035)
+(14:09:31.182) response.mask 0x0 ../../SD.c(1056)
+(14:09:31.182) End DBG SD_WriteBlock
+(14:09:34.870) SD_WriteBlock finished ../../SD.c : 1648 
+(14:09:34.876) End SD_disk_write ../../SD.c : 1727 
+(14:09:34.876) 
+(14:09:34.876) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:09:34.973) Start SD_disk_write ../../SD.c : 1623 
+(14:09:34.975) count 1 sector 16424 ../../SD.c : 1641 
+(14:09:35.026) Start DBG SD_WriteBlock addr 0x4028 ../../SD.c(1035)
+(14:09:35.026) response.mask 0x0 ../../SD.c(1056)
+(14:09:35.026) End DBG SD_WriteBlock
+(14:09:38.699) SD_WriteBlock finished ../../SD.c : 1648 
+(14:09:38.709) End SD_disk_write ../../SD.c : 1727 
+(14:09:38.709) 
+(14:09:38.709) Start SD_disk_write ../../SD.c : 1623 
+(14:09:38.709) count 1 sector 1288 ../../SD.c : 1641 
+(14:09:38.794) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:09:38.794) response.mask 0x0 ../../SD.c(1056)
+(14:09:38.794) End DBG SD_WriteBlock
+(14:09:40.987) false ../../SD.c(907)
+(14:09:40.987) SD_WriteBlock failed ../../SD.c : 1654 
+(14:09:41.106) End SD_disk_write ../../SD.c : 1727 
+(14:09:41.106) 
+(14:09:41.106) faild f_close : res : 1
+(14:09:41.106) =================Failed
+(14:10:09.030) <NUL>--------------------------------
+(14:10:12.048) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:10:12.126) App built on: Sep  8 2020 14:06:55
+(14:10:12.126) Press button A to read block.
+(14:10:12.126) =================
+(14:10:12.126) 1 Mount Drive
+(14:10:12.126) =================
+(14:10:12.126) =================Completed
+(14:10:12.126) =================
+(14:10:12.126) 2 Print Drive
+(14:10:12.126) =================
+(14:10:12.126) SD_disk_ioctl ../../SD.c : 1739 
+(14:10:12.126) cmd 0x2 ../../SD.c : 1752 
+(14:10:12.126) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:10:12.126) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:10:12.126) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:10:12.126) [D]System Volume Information
+(14:10:12.126) /20200903-3.txt : 		 0byte
+(14:10:12.126) =================Completed
+(14:10:12.126) =================
+(14:10:12.126) 3 File Write
+(14:10:12.126) =================
+(14:10:12.126) 0:20200903-3.txt
+(14:10:12.126) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:10:12.197) Start SD_disk_write ../../SD.c : 1623 
+(14:10:12.200) count 1 sector 16432 ../../SD.c : 1641 
+(14:10:12.262) Start DBG SD_WriteBlock addr 0x4030 ../../SD.c(1035)
+(14:10:12.262) response.mask 0x0 ../../SD.c(1056)
+(14:10:12.262) End DBG SD_WriteBlock
+(14:10:15.923) SD_WriteBlock finished ../../SD.c : 1648 
+(14:10:15.932) End SD_disk_write ../../SD.c : 1727 
+(14:10:15.932) 
+(14:10:15.932) Start SD_disk_write ../../SD.c : 1623 
+(14:10:15.932) count 1 sector 1288 ../../SD.c : 1641 
+(14:10:16.015) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:10:16.015) response.mask 0x0 ../../SD.c(1056)
+(14:10:16.015) End DBG SD_WriteBlock
+(14:10:19.650) SD_WriteBlock finished ../../SD.c : 1648 
+(14:10:19.680) End SD_disk_write ../../SD.c : 1727 
+(14:10:19.680) 
+(14:10:19.680) Start SD_disk_write ../../SD.c : 1623 
+(14:10:19.680) count 1 sector 8836 ../../SD.c : 1641 
+(14:10:19.680) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:10:19.680) response.mask 0x0 ../../SD.c(1056)
+(14:10:19.680) End DBG SD_WriteBlock
+(14:10:22.054) false ../../SD.c(907)
+(14:10:22.054) SD_WriteBlock failed ../../SD.c : 1654 
+(14:10:22.132) End SD_disk_write ../../SD.c : 1727 
+(14:10:22.132) 
+(14:10:22.132) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:10:32.065) false ../../SD.c(1140)
+(14:10:32.065) SD_ReadBlock failed ../../SD.c : 1581 
+(14:10:32.100) faild f_close : res : 1
+(14:10:32.100) =================Failed
+(14:10:42.455) <NUL>--------------------------------
+(14:10:45.463) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:10:45.463) App built on: Sep  8 2020 14:06:55
+(14:10:45.463) Press button A to read block.
+(14:10:45.586) =================
+(14:10:45.586) 1 Mount Drive
+(14:10:45.586) =================
+(14:10:45.586) =================Completed
+(14:10:45.586) =================
+(14:10:45.586) 2 Print Drive
+(14:10:45.586) =================
+(14:10:45.586) SD_disk_ioctl ../../SD.c : 1739 
+(14:10:45.586) cmd 0x2 ../../SD.c : 1752 
+(14:10:45.586) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:10:45.586) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:10:45.586) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:10:45.586) [D]System Volume Information
+(14:10:45.586) /20200903-3.txt : 		 0byte
+(14:10:45.586) =================Completed
+(14:10:45.586) =================
+(14:10:45.586) 3 File Write
+(14:10:45.586) =================
+(14:10:45.586) 0:20200903-3.txt
+(14:10:45.586) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:10:45.638) Start SD_disk_write ../../SD.c : 1623 
+(14:10:45.638) count 1 sector 16440 ../../SD.c : 1641 
+(14:10:45.638) Start DBG SD_WriteBlock addr 0x4038 ../../SD.c(1035)
+(14:10:45.638) response.mask 0x0 ../../SD.c(1056)
+(14:10:45.638) End DBG SD_WriteBlock
+(14:10:49.334) SD_WriteBlock finished ../../SD.c : 1648 
+(14:10:49.354) End SD_disk_write ../../SD.c : 1727 
+(14:10:49.354) 
+(14:10:49.354) Start SD_disk_write ../../SD.c : 1623 
+(14:10:49.354) count 1 sector 1288 ../../SD.c : 1641 
+(14:10:49.354) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:10:49.354) response.mask 0x0 ../../SD.c(1056)
+(14:10:49.354) End DBG SD_WriteBlock
+(14:10:53.060) SD_WriteBlock finished ../../SD.c : 1648 
+(14:10:53.080) End SD_disk_write ../../SD.c : 1727 
+(14:10:53.080) 
+(14:10:53.080) Start SD_disk_write ../../SD.c : 1623 
+(14:10:53.080) count 1 sector 8836 ../../SD.c : 1641 
+(14:10:53.080) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:10:53.080) response.mask 0x0 ../../SD.c(1056)
+(14:10:53.080) End DBG SD_WriteBlock
+(14:11:05.476) false ../../SD.c(907)
+(14:11:05.476) SD_WriteBlock failed ../../SD.c : 1654 
+(14:11:05.604) End SD_disk_write ../../SD.c : 1727 
+(14:11:05.604) 
+(14:11:05.604) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:11:15.485) false ../../SD.c(1140)
+(14:11:15.485) SD_ReadBlock failed ../../SD.c : 1581 
+(14:11:15.533) faild f_close : res : 1
+(14:11:15.533) =================Failed
+(14:11:18.056) <NUL>--------------------------------
+(14:11:21.117) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:11:21.117) App built on: Sep  8 2020 14:06:55
+(14:11:21.117) Press button A to read block.
+(14:11:21.258) =================
+(14:11:21.258) 1 Mount Drive
+(14:11:21.258) =================
+(14:11:21.258) =================Completed
+(14:11:21.258) =================
+(14:11:21.258) 2 Print Drive
+(14:11:21.258) =================
+(14:11:21.258) SD_disk_ioctl ../../SD.c : 1739 
+(14:11:21.258) cmd 0x2 ../../SD.c : 1752 
+(14:11:21.258) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:11:21.258) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:11:21.258) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:11:21.258) [D]System Volume Information
+(14:11:21.258) /20200903-3.txt : 		 0byte
+(14:11:21.258) =================Completed
+(14:11:21.258) =================
+(14:11:21.258) 3 File Write
+(14:11:21.258) =================
+(14:11:21.258) 0:20200903-3.txt
+(14:11:21.258) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:11:21.303) Start SD_disk_write ../../SD.c : 1623 
+(14:11:21.303) count 1 sector 16448 ../../SD.c : 1641 
+(14:11:21.303) Start DBG SD_WriteBlock addr 0x4040 ../../SD.c(1035)
+(14:11:21.303) response.mask 0x0 ../../SD.c(1056)
+(14:11:21.303) End DBG SD_WriteBlock
+(14:11:24.986) SD_WriteBlock finished ../../SD.c : 1648 
+(14:11:24.992) End SD_disk_write ../../SD.c : 1727 
+(14:11:24.992) 
+(14:11:24.992) Start SD_disk_write ../../SD.c : 1623 
+(14:11:25.075) count 1 sector 1288 ../../SD.c : 1641 
+(14:11:25.075) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:11:25.075) response.mask 0x0 ../../SD.c(1056)
+(14:11:25.075) End DBG SD_WriteBlock
+(14:11:28.713) SD_WriteBlock finished ../../SD.c : 1648 
+(14:11:28.727) End SD_disk_write ../../SD.c : 1727 
+(14:11:28.727) 
+(14:11:28.727) Start SD_disk_write ../../SD.c : 1623 
+(14:11:28.727) count 1 sector 8836 ../../SD.c : 1641 
+(14:11:28.824) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:11:28.824) response.mask 0x0 ../../SD.c(1056)
+(14:11:28.824) End DBG SD_WriteBlock
+(14:11:31.117) false ../../SD.c(907)
+(14:11:31.117) SD_WriteBlock failed ../../SD.c : 1654 
+(14:11:31.198) End SD_disk_write ../../SD.c : 1727 
+(14:11:31.198) 
+(14:11:31.198) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:11:41.129) false ../../SD.c(1140)
+(14:11:41.129) SD_ReadBlock failed ../../SD.c : 1581 
+(14:11:41.252) faild f_close : res : 1
+(14:11:41.252) =================Failed
+(14:12:15.062) <NUL>--------------------------------
+(14:12:18.124) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:12:18.124) App built on: Sep  8 2020 14:06:55
+(14:12:18.235) Press button A to read block.
+(14:12:18.235) =================
+(14:12:18.235) 1 Mount Drive
+(14:12:18.235) =================
+(14:12:18.235) =================Completed
+(14:12:18.235) =================
+(14:12:18.235) 2 Print Drive
+(14:12:18.235) =================
+(14:12:18.235) SD_disk_ioctl ../../SD.c : 1739 
+(14:12:18.235) cmd 0x2 ../../SD.c : 1752 
+(14:12:18.235) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:12:18.235) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:12:18.235) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:12:18.235) [D]System Volume Information
+(14:12:18.235) /20200903-3.txt : 		 0byte
+(14:12:18.235) =================Completed
+(14:12:18.235) =================
+(14:12:18.235) 3 File Write
+(14:12:18.235) =================
+(14:12:18.235) 0:20200903-3.txt
+(14:12:18.235) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:12:18.280) Start SD_disk_write ../../SD.c : 1623 
+(14:12:18.280) count 1 sector 16456 ../../SD.c : 1641 
+(14:12:18.280) Start DBG SD_WriteBlock addr 0x4048 ../../SD.c(1035)
+(14:12:18.320) response.mask 0x0 ../../SD.c(1056)
+(14:12:18.320) End DBG SD_WriteBlock
+(14:12:21.997) SD_WriteBlock finished ../../SD.c : 1648 
+(14:12:22.022) End SD_disk_write ../../SD.c : 1727 
+(14:12:22.022) 
+(14:12:22.022) Start SD_disk_write ../../SD.c : 1623 
+(14:12:22.022) count 1 sector 1288 ../../SD.c : 1641 
+(14:12:22.022) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:12:22.022) response.mask 0x0 ../../SD.c(1056)
+(14:12:22.022) End DBG SD_WriteBlock
+(14:12:25.723) SD_WriteBlock finished ../../SD.c : 1648 
+(14:12:25.727) End SD_disk_write ../../SD.c : 1727 
+(14:12:25.798) 
+(14:12:25.798) Start SD_disk_write ../../SD.c : 1623 
+(14:12:25.798) count 1 sector 8836 ../../SD.c : 1641 
+(14:12:25.798) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:12:25.798) response.mask 0x0 ../../SD.c(1056)
+(14:12:25.798) End DBG SD_WriteBlock
+(14:12:28.127) false ../../SD.c(907)
+(14:12:28.127) SD_WriteBlock failed ../../SD.c : 1654 
+(14:12:28.253) End SD_disk_write ../../SD.c : 1727 
+(14:12:28.253) 
+(14:12:28.253) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:12:38.137) false ../../SD.c(1140)
+(14:12:38.137) SD_ReadBlock failed ../../SD.c : 1581 
+(14:12:38.180) faild f_close : res : 1
+(14:12:38.180) =================Failed
+(14:12:42.538) <NUL>--------------------------------
+(14:12:45.563) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:12:45.563) App built on: Sep  8 2020 14:06:55
+(14:12:45.563) Press button A to read block.
+(14:12:45.563) =================
+(14:12:45.563) 1 Mount Drive
+(14:12:45.563) =================
+(14:12:45.563) =================Completed
+(14:12:45.563) =================
+(14:12:45.563) 2 Print Drive
+(14:12:45.563) =================
+(14:12:45.721) SD_disk_ioctl ../../SD.c : 1739 
+(14:12:45.721) cmd 0x2 ../../SD.c : 1752 
+(14:12:45.721) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:12:45.721) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:12:45.721) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:12:45.721) [D]System Volume Information
+(14:12:45.721) /20200903-3.txt : 		 0byte
+(14:12:45.721) =================Completed
+(14:12:45.721) =================
+(14:12:45.721) 3 File Write
+(14:12:45.721) =================
+(14:12:45.721) 0:20200903-3.txt
+(14:12:45.721) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:12:45.721) Start SD_disk_write ../../SD.c : 1623 
+(14:12:45.721) count 1 sector 16464 ../../SD.c : 1641 
+(14:12:45.721) Start DBG SD_WriteBlock addr 0x4050 ../../SD.c(1035)
+(14:12:45.721) response.mask 0x0 ../../SD.c(1056)
+(14:12:45.721) End DBG SD_WriteBlock
+(14:12:49.423) SD_WriteBlock finished ../../SD.c : 1648 
+(14:12:49.430) End SD_disk_write ../../SD.c : 1727 
+(14:12:49.430) 
+(14:12:49.430) Start SD_disk_write ../../SD.c : 1623 
+(14:12:49.536) count 1 sector 1288 ../../SD.c : 1641 
+(14:12:49.536) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:12:49.536) response.mask 0x0 ../../SD.c(1056)
+(14:12:49.536) End DBG SD_WriteBlock
+(14:12:53.149) SD_WriteBlock finished ../../SD.c : 1648 
+(14:12:53.158) End SD_disk_write ../../SD.c : 1727 
+(14:12:53.158) 
+(14:12:53.158) Start SD_disk_write ../../SD.c : 1623 
+(14:12:53.158) count 1 sector 8836 ../../SD.c : 1641 
+(14:12:53.240) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:12:53.240) response.mask 0x0 ../../SD.c(1056)
+(14:12:53.240) End DBG SD_WriteBlock
+(14:12:55.554) false ../../SD.c(907)
+(14:12:55.554) SD_WriteBlock failed ../../SD.c : 1654 
+(14:12:55.614) End SD_disk_write ../../SD.c : 1727 
+(14:12:55.614) 
+(14:12:55.614) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:13:05.565) false ../../SD.c(1140)
+(14:13:05.565) SD_ReadBlock failed ../../SD.c : 1581 
+(14:13:05.655) faild f_close : res : 1
+(14:13:05.655) =================Failed
+(14:13:06.897) <NUL>--------------------------------
+(14:13:09.935) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:13:09.935) App built on: Sep  8 2020 14:06:55
+(14:13:09.935) Press button A to read block.
+(14:13:09.935) =================
+(14:13:09.935) 1 Mount Drive
+(14:13:10.055) =================
+(14:13:10.055) =================Completed
+(14:13:10.055) =================
+(14:13:10.055) 2 Print Drive
+(14:13:10.055) =================
+(14:13:10.055) SD_disk_ioctl ../../SD.c : 1739 
+(14:13:10.055) cmd 0x2 ../../SD.c : 1752 
+(14:13:10.055) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:13:10.055) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:13:10.055) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:13:10.055) [D]System Volume Information
+(14:13:10.055) /20200903-3.txt : 		 0byte
+(14:13:10.055) =================Completed
+(14:13:10.055) =================
+(14:13:10.055) 3 File Write
+(14:13:10.055) =================
+(14:13:10.055) 0:20200903-3.txt
+(14:13:10.055) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:13:10.106) Start SD_disk_write ../../SD.c : 1623 
+(14:13:10.106) count 1 sector 16472 ../../SD.c : 1641 
+(14:13:10.106) Start DBG SD_WriteBlock addr 0x4058 ../../SD.c(1035)
+(14:13:10.106) response.mask 0x0 ../../SD.c(1056)
+(14:13:10.106) End DBG SD_WriteBlock
+(14:13:13.801) SD_WriteBlock finished ../../SD.c : 1648 
+(14:13:13.812) End SD_disk_write ../../SD.c : 1727 
+(14:13:13.812) 
+(14:13:13.812) Start SD_disk_write ../../SD.c : 1623 
+(14:13:13.812) count 1 sector 1288 ../../SD.c : 1641 
+(14:13:13.904) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:13:13.904) response.mask 0x0 ../../SD.c(1056)
+(14:13:13.904) End DBG SD_WriteBlock
+(14:13:17.528) SD_WriteBlock finished ../../SD.c : 1648 
+(14:13:17.532) End SD_disk_write ../../SD.c : 1727 
+(14:13:17.603) 
+(14:13:17.603) Start SD_disk_write ../../SD.c : 1623 
+(14:13:17.603) count 1 sector 8836 ../../SD.c : 1641 
+(14:13:17.603) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:13:17.603) response.mask 0x0 ../../SD.c(1056)
+(14:13:17.603) End DBG SD_WriteBlock
+(14:13:29.943) false ../../SD.c(907)
+(14:13:29.943) SD_WriteBlock failed ../../SD.c : 1654 
+(14:13:29.991) End SD_disk_write ../../SD.c : 1727 
+(14:13:29.991) 
+(14:13:29.991) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:13:39.954) false ../../SD.c(1140)
+(14:13:39.954) SD_ReadBlock failed ../../SD.c : 1581 
+(14:13:39.997) faild f_close : res : 1
+(14:13:39.997) =================Failed
+(14:13:42.959) <NUL>--------------------------------
+(14:13:46.014) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:13:46.014) App built on: Sep  8 2020 14:06:55
+(14:13:46.014) Press button A to read block.
+(14:13:46.095) =================
+(14:13:46.095) 1 Mount Drive
+(14:13:46.095) =================
+(14:13:46.095) =================Completed
+(14:13:46.095) =================
+(14:13:46.095) 2 Print Drive
+(14:13:46.095) =================
+(14:13:46.095) SD_disk_ioctl ../../SD.c : 1739 
+(14:13:46.095) cmd 0x2 ../../SD.c : 1752 
+(14:13:46.095) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:13:46.095) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:13:46.095) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:13:46.095) [D]System Volume Information
+(14:13:46.095) /20200903-3.txt : 		 0byte
+(14:13:46.095) =================Completed
+(14:13:46.095) =================
+(14:13:46.095) 3 File Write
+(14:13:46.095) =================
+(14:13:46.095) 0:20200903-3.txt
+(14:13:46.095) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:13:46.159) Start SD_disk_write ../../SD.c : 1623 
+(14:13:46.161) count 1 sector 16480 ../../SD.c : 1641 
+(14:13:46.238) Start DBG SD_WriteBlock addr 0x4060 ../../SD.c(1035)
+(14:13:46.238) response.mask 0x0 ../../SD.c(1056)
+(14:13:46.238) End DBG SD_WriteBlock
+(14:13:49.885) SD_WriteBlock finished ../../SD.c : 1648 
+(14:13:49.889) End SD_disk_write ../../SD.c : 1727 
+(14:13:49.957) 
+(14:13:49.957) Start SD_disk_write ../../SD.c : 1623 
+(14:13:49.957) count 1 sector 1288 ../../SD.c : 1641 
+(14:13:49.957) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:13:49.957) response.mask 0x0 ../../SD.c(1056)
+(14:13:49.957) End DBG SD_WriteBlock
+(14:13:53.612) SD_WriteBlock finished ../../SD.c : 1648 
+(14:13:53.617) End SD_disk_write ../../SD.c : 1727 
+(14:13:53.675) 
+(14:13:53.675) Start SD_disk_write ../../SD.c : 1623 
+(14:13:53.675) count 1 sector 8836 ../../SD.c : 1641 
+(14:13:53.675) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:13:53.675) response.mask 0x0 ../../SD.c(1056)
+(14:13:53.675) End DBG SD_WriteBlock
+(14:14:06.027) false ../../SD.c(907)
+(14:14:06.027) SD_WriteBlock failed ../../SD.c : 1654 
+(14:14:06.075) End SD_disk_write ../../SD.c : 1727 
+(14:14:06.075) 
+(14:14:06.075) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:14:16.037) false ../../SD.c(1140)
+(14:14:16.037) SD_ReadBlock failed ../../SD.c : 1581 
+(14:14:16.080) faild f_close : res : 1
+(14:14:16.080) =================Failed
+(14:14:18.596) <NUL>--------------------------------
+(14:14:21.682) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:14:21.682) App built on: Sep  8 2020 14:06:55
+(14:14:21.754) Press button A to read block.
+(14:14:21.754) =================
+(14:14:21.754) 1 Mount Drive
+(14:14:21.754) =================
+(14:14:21.754) =================Completed
+(14:14:21.754) =================
+(14:14:21.754) 2 Print Drive
+(14:14:21.754) =================
+(14:14:21.754) SD_disk_ioctl ../../SD.c : 1739 
+(14:14:21.754) cmd 0x2 ../../SD.c : 1752 
+(14:14:21.754) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:14:21.754) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:14:21.754) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:14:21.754) [D]System Volume Information
+(14:14:21.754) /20200903-3.txt : 		 0byte
+(14:14:21.754) =================Completed
+(14:14:21.754) =================
+(14:14:21.754) 3 File Write
+(14:14:21.754) =================
+(14:14:21.754) 0:20200903-3.txt
+(14:14:21.754) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:14:21.830) Start SD_disk_write ../../SD.c : 1623 
+(14:14:21.833) count 1 sector 16488 ../../SD.c : 1641 
+(14:14:21.916) Start DBG SD_WriteBlock addr 0x4068 ../../SD.c(1035)
+(14:14:21.916) response.mask 0x0 ../../SD.c(1056)
+(14:14:21.916) End DBG SD_WriteBlock
+(14:14:25.556) SD_WriteBlock finished ../../SD.c : 1648 
+(14:14:25.560) End SD_disk_write ../../SD.c : 1727 
+(14:14:25.629) 
+(14:14:25.629) Start SD_disk_write ../../SD.c : 1623 
+(14:14:25.629) count 1 sector 1288 ../../SD.c : 1641 
+(14:14:25.629) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:14:25.629) response.mask 0x0 ../../SD.c(1056)
+(14:14:25.629) End DBG SD_WriteBlock
+(14:14:29.283) SD_WriteBlock finished ../../SD.c : 1648 
+(14:14:29.291) End SD_disk_write ../../SD.c : 1727 
+(14:14:29.291) 
+(14:14:29.291) Start SD_disk_write ../../SD.c : 1623 
+(14:14:29.291) count 1 sector 8836 ../../SD.c : 1641 
+(14:14:29.380) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:14:29.380) response.mask 0x0 ../../SD.c(1056)
+(14:14:29.380) End DBG SD_WriteBlock
+(14:14:31.688) false ../../SD.c(907)
+(14:14:31.688) SD_WriteBlock failed ../../SD.c : 1654 
+(14:14:31.755) End SD_disk_write ../../SD.c : 1727 
+(14:14:31.755) 
+(14:14:31.755) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:14:41.698) false ../../SD.c(1140)
+(14:14:41.698) SD_ReadBlock failed ../../SD.c : 1581 
+(14:14:41.742) faild f_close : res : 1
+(14:14:41.742) =================Failed
+(14:14:45.259) <NUL>--------------------------------
+(14:14:48.297) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:14:48.377) App built on: Sep  8 2020 14:06:55
+(14:14:48.377) Press button A to read block.
+(14:14:48.377) =================
+(14:14:48.377) 1 Mount Drive
+(14:14:48.377) =================
+(14:14:48.377) =================Completed
+(14:14:48.377) =================
+(14:14:48.377) 2 Print Drive
+(14:14:48.377) =================
+(14:14:48.377) SD_disk_ioctl ../../SD.c : 1739 
+(14:14:48.377) cmd 0x2 ../../SD.c : 1752 
+(14:14:48.377) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:14:48.377) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:14:48.377) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:14:48.377) [D]System Volume Information
+(14:14:48.377) /20200903-3.txt : 		 0byte
+(14:14:48.377) =================Completed
+(14:14:48.377) =================
+(14:14:48.377) 3 File Write
+(14:14:48.377) =================
+(14:14:48.377) 0:20200903-3.txt
+(14:14:48.377) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:14:48.446) Start SD_disk_write ../../SD.c : 1623 
+(14:14:48.449) count 1 sector 16496 ../../SD.c : 1641 
+(14:14:48.518) Start DBG SD_WriteBlock addr 0x4070 ../../SD.c(1035)
+(14:14:48.518) response.mask 0x0 ../../SD.c(1056)
+(14:14:48.518) End DBG SD_WriteBlock
+(14:14:52.173) SD_WriteBlock finished ../../SD.c : 1648 
+(14:14:52.182) End SD_disk_write ../../SD.c : 1727 
+(14:14:52.182) 
+(14:14:52.182) Start SD_disk_write ../../SD.c : 1623 
+(14:14:52.182) count 1 sector 1288 ../../SD.c : 1641 
+(14:14:52.274) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:14:52.274) response.mask 0x0 ../../SD.c(1056)
+(14:14:52.274) End DBG SD_WriteBlock
+(14:14:55.900) SD_WriteBlock finished ../../SD.c : 1648 
+(14:14:55.904) End SD_disk_write ../../SD.c : 1727 
+(14:14:55.978) 
+(14:14:55.978) Start SD_disk_write ../../SD.c : 1623 
+(14:14:55.978) count 1 sector 8836 ../../SD.c : 1641 
+(14:14:55.978) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:14:55.978) response.mask 0x0 ../../SD.c(1056)
+(14:14:55.978) End DBG SD_WriteBlock
+(14:15:08.316) false ../../SD.c(907)
+(14:15:08.316) SD_WriteBlock failed ../../SD.c : 1654 
+(14:15:08.367) End SD_disk_write ../../SD.c : 1727 
+(14:15:08.367) 
+(14:15:08.367) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:15:18.329) false ../../SD.c(1140)
+(14:15:18.329) SD_ReadBlock failed ../../SD.c : 1581 
+(14:15:18.389) faild f_close : res : 1
+(14:15:18.389) =================Failed
+(14:15:20.835) <NUL><NUL>--------------------------------
+(14:15:53.579) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:15:53.663) App built on: Sep  8 2020 14:06:55
+(14:15:53.663) Press button A to read block.
+(14:15:53.663) =================
+(14:15:53.663) 1 Mount Drive
+(14:15:53.663) =================
+(14:15:53.663) =================Completed
+(14:15:53.663) =================
+(14:15:53.663) 2 Print Drive
+(14:15:53.663) =================
+(14:15:53.663) SD_disk_ioctl ../../SD.c : 1739 
+(14:15:53.663) cmd 0x2 ../../SD.c : 1752 
+(14:15:53.663) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:15:53.663) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:15:53.663) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:15:53.663) [D]System Volume Information
+(14:15:53.663) /20200903-3.txt : 		 0byte
+(14:15:53.663) =================Completed
+(14:15:53.663) =================
+(14:15:53.663) 3 File Write
+(14:15:53.663) =================
+(14:15:53.663) 0:20200903-3.txt
+(14:15:53.663) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:15:53.730) Start SD_disk_write ../../SD.c : 1623 
+(14:15:53.733) count 1 sector 16504 ../../SD.c : 1641 
+(14:15:53.800) Start DBG SD_WriteBlock addr 0x4078 ../../SD.c(1035)
+(14:15:53.800) response.mask 0x0 ../../SD.c(1056)
+(14:15:53.800) End DBG SD_WriteBlock
+(14:15:57.456) SD_WriteBlock finished ../../SD.c : 1648 
+(14:15:57.462) End SD_disk_write ../../SD.c : 1727 
+(14:15:57.462) 
+(14:15:57.462) Start SD_disk_write ../../SD.c : 1623 
+(14:15:57.542) count 1 sector 1288 ../../SD.c : 1641 
+(14:15:57.542) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:15:57.542) response.mask 0x0 ../../SD.c(1056)
+(14:15:57.542) End DBG SD_WriteBlock
+(14:16:01.183) SD_WriteBlock finished ../../SD.c : 1648 
+(14:16:01.187) End SD_disk_write ../../SD.c : 1727 
+(14:16:01.254) 
+(14:16:01.254) Start SD_disk_write ../../SD.c : 1623 
+(14:16:01.254) count 1 sector 8836 ../../SD.c : 1641 
+(14:16:01.254) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:16:01.254) response.mask 0x0 ../../SD.c(1056)
+(14:16:01.254) End DBG SD_WriteBlock
+(14:16:03.587) false ../../SD.c(907)
+(14:16:03.587) SD_WriteBlock failed ../../SD.c : 1654 
+(14:16:03.622) End SD_disk_write ../../SD.c : 1727 
+(14:16:03.622) 
+(14:16:03.622) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:16:13.597) false ../../SD.c(1140)
+(14:16:13.597) SD_ReadBlock failed ../../SD.c : 1581 
+(14:16:13.632) faild f_close : res : 1
+(14:16:13.632) =================Failed
+(14:16:16.264) <NUL>--------------------------------
+(14:16:19.241) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:16:19.241) App built on: Sep  8 2020 14:06:55
+(14:16:19.320) Press button A to read block.
+(14:16:19.320) =================
+(14:16:19.320) 1 Mount Drive
+(14:16:19.320) =================
+(14:16:19.320) =================Completed
+(14:16:19.320) =================
+(14:16:19.320) 2 Print Drive
+(14:16:19.320) =================
+(14:16:19.320) SD_disk_ioctl ../../SD.c : 1739 
+(14:16:19.320) cmd 0x2 ../../SD.c : 1752 
+(14:16:19.320) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:16:19.320) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:16:19.320) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:16:19.320) [D]System Volume Information
+(14:16:19.320) /20200903-3.txt : 		 0byte
+(14:16:19.320) =================Completed
+(14:16:19.320) =================
+(14:16:19.320) 3 File Write
+(14:16:19.320) =================
+(14:16:19.320) 0:20200903-3.txt
+(14:16:19.320) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:16:19.389) Start SD_disk_write ../../SD.c : 1623 
+(14:16:19.392) count 1 sector 16512 ../../SD.c : 1641 
+(14:16:19.465) Start DBG SD_WriteBlock addr 0x4080 ../../SD.c(1035)
+(14:16:19.465) response.mask 0x0 ../../SD.c(1056)
+(14:16:19.465) End DBG SD_WriteBlock
+(14:16:23.115) SD_WriteBlock finished ../../SD.c : 1648 
+(14:16:23.121) End SD_disk_write ../../SD.c : 1727 
+(14:16:23.121) 
+(14:16:23.121) Start SD_disk_write ../../SD.c : 1623 
+(14:16:23.205) count 1 sector 1288 ../../SD.c : 1641 
+(14:16:23.205) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:16:23.205) response.mask 0x0 ../../SD.c(1056)
+(14:16:23.205) End DBG SD_WriteBlock
+(14:16:26.842) SD_WriteBlock finished ../../SD.c : 1648 
+(14:16:26.846) End SD_disk_write ../../SD.c : 1727 
+(14:16:26.913) 
+(14:16:26.913) Start SD_disk_write ../../SD.c : 1623 
+(14:16:26.913) count 1 sector 8836 ../../SD.c : 1641 
+(14:16:26.913) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:16:26.913) response.mask 0x0 ../../SD.c(1056)
+(14:16:26.913) End DBG SD_WriteBlock
+(14:16:39.257) false ../../SD.c(907)
+(14:16:39.257) SD_WriteBlock failed ../../SD.c : 1654 
+(14:16:39.324) End SD_disk_write ../../SD.c : 1727 
+(14:16:39.324) 
+(14:16:39.324) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:16:49.268) false ../../SD.c(1140)
+(14:16:49.268) SD_ReadBlock failed ../../SD.c : 1581 
+(14:16:49.329) faild f_close : res : 1
+(14:16:49.329) =================Failed
+(14:16:58.324) <NUL>--------------------------------
+(14:17:01.341) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:17:01.412) App built on: Sep  8 2020 14:06:55
+(14:17:01.412) Press button A to read block.
+(14:17:01.412) =================
+(14:17:01.412) 1 Mount Drive
+(14:17:01.412) =================
+(14:17:01.412) =================Completed
+(14:17:01.412) =================
+(14:17:01.412) 2 Print Drive
+(14:17:01.412) =================
+(14:17:01.412) SD_disk_ioctl ../../SD.c : 1739 
+(14:17:01.412) cmd 0x2 ../../SD.c : 1752 
+(14:17:01.412) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:17:01.412) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:17:01.412) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:17:01.412) [D]System Volume Information
+(14:17:01.412) /20200903-3.txt : 		 0byte
+(14:17:01.412) =================Completed
+(14:17:01.412) =================
+(14:17:01.412) 3 File Write
+(14:17:01.412) =================
+(14:17:01.412) 0:20200903-3.txt
+(14:17:01.412) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:17:01.490) Start SD_disk_write ../../SD.c : 1623 
+(14:17:01.493) count 1 sector 16520 ../../SD.c : 1641 
+(14:17:01.576) Start DBG SD_WriteBlock addr 0x4088 ../../SD.c(1035)
+(14:17:01.576) response.mask 0x0 ../../SD.c(1056)
+(14:17:01.576) End DBG SD_WriteBlock
+(14:17:05.216) SD_WriteBlock finished ../../SD.c : 1648 
+(14:17:05.225) End SD_disk_write ../../SD.c : 1727 
+(14:17:05.225) 
+(14:17:05.225) Start SD_disk_write ../../SD.c : 1623 
+(14:17:05.225) count 1 sector 1288 ../../SD.c : 1641 
+(14:17:05.316) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:17:05.316) response.mask 0x0 ../../SD.c(1056)
+(14:17:05.316) End DBG SD_WriteBlock
+(14:17:08.942) SD_WriteBlock finished ../../SD.c : 1648 
+(14:17:08.949) End SD_disk_write ../../SD.c : 1727 
+(14:17:08.949) 
+(14:17:08.949) Start SD_disk_write ../../SD.c : 1623 
+(14:17:09.050) count 1 sector 8836 ../../SD.c : 1641 
+(14:17:09.050) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:17:09.050) response.mask 0x0 ../../SD.c(1056)
+(14:17:09.050) End DBG SD_WriteBlock
+(14:17:11.348) false ../../SD.c(907)
+(14:17:11.348) SD_WriteBlock failed ../../SD.c : 1654 
+(14:17:11.380) End SD_disk_write ../../SD.c : 1727 
+(14:17:11.380) 
+(14:17:11.380) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:17:21.359) false ../../SD.c(1140)
+(14:17:21.359) SD_ReadBlock failed ../../SD.c : 1581 
+(14:17:21.428) faild f_close : res : 1
+(14:17:21.428) =================Failed
+(14:17:24.454) <NUL>--------------------------------
+(14:17:27.480) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:17:27.480) App built on: Sep  8 2020 14:06:55
+(14:17:27.480) Press button A to read block.
+(14:17:27.586) =================
+(14:17:27.586) 1 Mount Drive
+(14:17:27.586) =================
+(14:17:27.586) =================Completed
+(14:17:27.586) =================
+(14:17:27.586) 2 Print Drive
+(14:17:27.586) =================
+(14:17:27.586) SD_disk_ioctl ../../SD.c : 1739 
+(14:17:27.586) cmd 0x2 ../../SD.c : 1752 
+(14:17:27.586) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:17:27.586) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:17:27.586) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:17:27.586) [D]System Volume Information
+(14:17:27.586) /20200903-3.txt : 		 0byte
+(14:17:27.586) =================Completed
+(14:17:27.586) =================
+(14:17:27.586) 3 File Write
+(14:17:27.586) =================
+(14:17:27.586) 0:20200903-3.txt
+(14:17:27.586) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:17:27.632) Start SD_disk_write ../../SD.c : 1623 
+(14:17:27.632) count 1 sector 16528 ../../SD.c : 1641 
+(14:17:27.632) Start DBG SD_WriteBlock addr 0x4090 ../../SD.c(1035)
+(14:17:27.670) response.mask 0x0 ../../SD.c(1056)
+(14:17:27.670) End DBG SD_WriteBlock
+(14:17:31.352) SD_WriteBlock finished ../../SD.c : 1648 
+(14:17:31.361) End SD_disk_write ../../SD.c : 1727 
+(14:17:31.361) 
+(14:17:31.361) Start SD_disk_write ../../SD.c : 1623 
+(14:17:31.361) count 1 sector 1288 ../../SD.c : 1641 
+(14:17:31.461) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:17:31.461) response.mask 0x0 ../../SD.c(1056)
+(14:17:31.461) End DBG SD_WriteBlock
+(14:17:35.078) SD_WriteBlock finished ../../SD.c : 1648 
+(14:17:35.083) End SD_disk_write ../../SD.c : 1727 
+(14:17:35.149) 
+(14:17:35.149) Start SD_disk_write ../../SD.c : 1623 
+(14:17:35.149) count 1 sector 8836 ../../SD.c : 1641 
+(14:17:35.149) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:17:35.149) response.mask 0x0 ../../SD.c(1056)
+(14:17:35.149) End DBG SD_WriteBlock
+(14:17:37.482) false ../../SD.c(907)
+(14:17:37.482) SD_WriteBlock failed ../../SD.c : 1654 
+(14:17:37.516) End SD_disk_write ../../SD.c : 1727 
+(14:17:37.516) 
+(14:17:37.516) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:17:47.493) false ../../SD.c(1140)
+(14:17:47.493) SD_ReadBlock failed ../../SD.c : 1581 
+(14:17:47.555) faild f_close : res : 1
+(14:17:47.555) =================Failed
+(14:17:55.658) <NUL>--------------------------------
+(14:17:58.641) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:17:58.716) App built on: Sep  8 2020 14:06:55
+(14:17:58.716) Press button A to read block.
+(14:17:58.716) =================
+(14:17:58.716) 1 Mount Drive
+(14:17:58.716) =================
+(14:17:58.716) =================Completed
+(14:17:58.716) =================
+(14:17:58.716) 2 Print Drive
+(14:17:58.716) =================
+(14:17:58.716) SD_disk_ioctl ../../SD.c : 1739 
+(14:17:58.716) cmd 0x2 ../../SD.c : 1752 
+(14:17:58.716) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:17:58.716) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:17:58.716) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:17:58.716) [D]System Volume Information
+(14:17:58.716) /20200903-3.txt : 		 0byte
+(14:17:58.716) =================Completed
+(14:17:58.716) =================
+(14:17:58.716) 3 File Write
+(14:17:58.716) =================
+(14:17:58.716) 0:20200903-3.txt
+(14:17:58.716) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:17:58.791) Start SD_disk_write ../../SD.c : 1623 
+(14:17:58.794) count 1 sector 16536 ../../SD.c : 1641 
+(14:17:58.863) Start DBG SD_WriteBlock addr 0x4098 ../../SD.c(1035)
+(14:17:58.863) response.mask 0x0 ../../SD.c(1056)
+(14:17:58.863) End DBG SD_WriteBlock
+(14:18:02.518) SD_WriteBlock finished ../../SD.c : 1648 
+(14:18:02.521) End SD_disk_write ../../SD.c : 1727 
+(14:18:02.598) 
+(14:18:02.598) Start SD_disk_write ../../SD.c : 1623 
+(14:18:02.598) count 1 sector 1288 ../../SD.c : 1641 
+(14:18:02.598) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:18:02.598) response.mask 0x0 ../../SD.c(1056)
+(14:18:02.598) End DBG SD_WriteBlock
+(14:18:06.252) SD_WriteBlock finished ../../SD.c : 1648 
+(14:18:06.284) End SD_disk_write ../../SD.c : 1727 
+(14:18:06.284) 
+(14:18:06.284) Start SD_disk_write ../../SD.c : 1623 
+(14:18:06.284) count 1 sector 8836 ../../SD.c : 1641 
+(14:18:06.284) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:18:06.284) response.mask 0x0 ../../SD.c(1056)
+(14:18:06.284) End DBG SD_WriteBlock
+(14:18:08.648) false ../../SD.c(907)
+(14:18:08.648) SD_WriteBlock failed ../../SD.c : 1654 
+(14:18:08.686) End SD_disk_write ../../SD.c : 1727 
+(14:18:08.686) 
+(14:18:08.686) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:18:18.659) false ../../SD.c(1140)
+(14:18:18.659) SD_ReadBlock failed ../../SD.c : 1581 
+(14:18:18.702) faild f_close : res : 1
+(14:18:18.702) =================Failed
+(14:18:22.541) <NUL>--------------------------------
+(14:18:25.563) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:18:25.563) App built on: Sep  8 2020 14:06:55
+(14:18:25.630) Press button A to read block.
+(14:18:25.630) =================
+(14:18:25.630) 1 Mount Drive
+(14:18:25.630) =================
+(14:18:25.630) =================Completed
+(14:18:25.630) =================
+(14:18:25.630) 2 Print Drive
+(14:18:25.630) =================
+(14:18:25.630) SD_disk_ioctl ../../SD.c : 1739 
+(14:18:25.630) cmd 0x2 ../../SD.c : 1752 
+(14:18:25.630) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:18:25.630) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:18:25.630) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:18:25.630) [D]System Volume Information
+(14:18:25.630) /20200903-3.txt : 		 0byte
+(14:18:25.630) =================Completed
+(14:18:25.630) =================
+(14:18:25.630) 3 File Write
+(14:18:25.630) =================
+(14:18:25.630) 0:20200903-3.txt
+(14:18:25.630) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:18:25.710) Start SD_disk_write ../../SD.c : 1623 
+(14:18:25.713) count 1 sector 16544 ../../SD.c : 1641 
+(14:18:25.791) Start DBG SD_WriteBlock addr 0x40a0 ../../SD.c(1035)
+(14:18:25.791) response.mask 0x0 ../../SD.c(1056)
+(14:18:25.791) End DBG SD_WriteBlock
+(14:18:29.436) SD_WriteBlock finished ../../SD.c : 1648 
+(14:18:29.470) End SD_disk_write ../../SD.c : 1727 
+(14:18:29.470) 
+(14:18:29.470) Start SD_disk_write ../../SD.c : 1623 
+(14:18:29.470) count 1 sector 1288 ../../SD.c : 1641 
+(14:18:29.470) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:18:29.470) response.mask 0x0 ../../SD.c(1056)
+(14:18:29.470) End DBG SD_WriteBlock
+(14:18:33.163) SD_WriteBlock finished ../../SD.c : 1648 
+(14:18:33.168) End SD_disk_write ../../SD.c : 1727 
+(14:18:33.265) 
+(14:18:33.265) Start SD_disk_write ../../SD.c : 1623 
+(14:18:33.265) count 1 sector 8836 ../../SD.c : 1641 
+(14:18:33.265) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:18:33.265) response.mask 0x0 ../../SD.c(1056)
+(14:18:33.265) End DBG SD_WriteBlock
+(14:18:45.578) false ../../SD.c(907)
+(14:18:45.578) SD_WriteBlock failed ../../SD.c : 1654 
+(14:18:45.626) End SD_disk_write ../../SD.c : 1727 
+(14:18:45.626) 
+(14:18:45.626) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:18:55.590) false ../../SD.c(1140)
+(14:18:55.590) SD_ReadBlock failed ../../SD.c : 1581 
+(14:18:55.714) faild f_close : res : 1
+(14:18:55.714) =================Failed
+(14:19:06.877) <NUL>--------------------------------
+(14:19:09.918) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:19:10.003) App built on: Sep  8 2020 14:06:55
+(14:19:10.003) Press button A to read block.
+(14:19:10.003) =================
+(14:19:10.003) 1 Mount Drive
+(14:19:10.003) =================
+(14:19:10.003) =================Completed
+(14:19:10.003) =================
+(14:19:10.003) 2 Print Drive
+(14:19:10.003) =================
+(14:19:10.003) SD_disk_ioctl ../../SD.c : 1739 
+(14:19:10.003) cmd 0x2 ../../SD.c : 1752 
+(14:19:10.003) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:19:10.003) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:19:10.003) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:19:10.003) [D]System Volume Information
+(14:19:10.003) /20200903-3.txt : 		 0byte
+(14:19:10.003) =================Completed
+(14:19:10.003) =================
+(14:19:10.003) 3 File Write
+(14:19:10.003) =================
+(14:19:10.003) 0:20200903-3.txt
+(14:19:10.003) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:19:10.069) Start SD_disk_write ../../SD.c : 1623 
+(14:19:10.071) count 1 sector 16552 ../../SD.c : 1641 
+(14:19:10.140) Start DBG SD_WriteBlock addr 0x40a8 ../../SD.c(1035)
+(14:19:10.140) response.mask 0x0 ../../SD.c(1056)
+(14:19:10.140) End DBG SD_WriteBlock
+(14:19:13.794) SD_WriteBlock finished ../../SD.c : 1648 
+(14:19:13.799) End SD_disk_write ../../SD.c : 1727 
+(14:19:13.870) 
+(14:19:13.870) Start SD_disk_write ../../SD.c : 1623 
+(14:19:13.870) count 1 sector 1288 ../../SD.c : 1641 
+(14:19:13.870) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:19:13.870) response.mask 0x0 ../../SD.c(1056)
+(14:19:13.870) End DBG SD_WriteBlock
+(14:19:17.521) SD_WriteBlock finished ../../SD.c : 1648 
+(14:19:17.527) End SD_disk_write ../../SD.c : 1727 
+(14:19:17.595) 
+(14:19:17.595) Start SD_disk_write ../../SD.c : 1623 
+(14:19:17.595) count 1 sector 8836 ../../SD.c : 1641 
+(14:19:17.595) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:19:17.595) response.mask 0x0 ../../SD.c(1056)
+(14:19:17.595) End DBG SD_WriteBlock
+(14:19:19.925) false ../../SD.c(907)
+(14:19:19.925) SD_WriteBlock failed ../../SD.c : 1654 
+(14:19:19.959) End SD_disk_write ../../SD.c : 1727 
+(14:19:19.959) 
+(14:19:19.959) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:19:29.936) false ../../SD.c(1140)
+(14:19:29.936) SD_ReadBlock failed ../../SD.c : 1581 
+(14:19:29.979) faild f_close : res : 1
+(14:19:29.979) =================Failed
+(14:19:33.522) <NUL>--------------------------------
+(14:19:36.545) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:19:36.628) App built on: Sep  8 2020 14:06:55
+(14:19:36.628) Press button A to read block.
+(14:19:36.628) =================
+(14:19:36.628) 1 Mount Drive
+(14:19:36.628) =================
+(14:19:36.628) =================Completed
+(14:19:36.628) =================
+(14:19:36.628) 2 Print Drive
+(14:19:36.628) =================
+(14:19:36.628) SD_disk_ioctl ../../SD.c : 1739 
+(14:19:36.628) cmd 0x2 ../../SD.c : 1752 
+(14:19:36.628) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:19:36.628) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:19:36.628) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:19:36.628) [D]System Volume Information
+(14:19:36.628) /20200903-3.txt : 		 0byte
+(14:19:36.628) =================Completed
+(14:19:36.628) =================
+(14:19:36.628) 3 File Write
+(14:19:36.628) =================
+(14:19:36.628) 0:20200903-3.txt
+(14:19:36.628) Start DBG SD_ReadBlock addr 0x508 ../../SD.c(1127)
+(14:19:36.695) Start SD_disk_write ../../SD.c : 1623 
+(14:19:36.697) count 1 sector 16560 ../../SD.c : 1641 
+(14:19:36.766) Start DBG SD_WriteBlock addr 0x40b0 ../../SD.c(1035)
+(14:19:36.766) response.mask 0x0 ../../SD.c(1056)
+(14:19:36.766) End DBG SD_WriteBlock
+(14:19:40.429) SD_WriteBlock finished ../../SD.c : 1648 
+(14:19:40.435) End SD_disk_write ../../SD.c : 1727 
+(14:19:40.506) 
+(14:19:40.506) Start SD_disk_write ../../SD.c : 1623 
+(14:19:40.506) count 1 sector 1288 ../../SD.c : 1641 
+(14:19:40.506) Start DBG SD_WriteBlock addr 0x508 ../../SD.c(1035)
+(14:19:40.506) response.mask 0x0 ../../SD.c(1056)
+(14:19:40.506) End DBG SD_WriteBlock
+(14:19:44.156) SD_WriteBlock finished ../../SD.c : 1648 
+(14:19:44.160) End SD_disk_write ../../SD.c : 1727 
+(14:19:44.227) 
+(14:19:44.227) Start SD_disk_write ../../SD.c : 1623 
+(14:19:44.227) count 1 sector 8836 ../../SD.c : 1641 
+(14:19:44.227) Start DBG SD_WriteBlock addr 0x2284 ../../SD.c(1035)
+(14:19:44.227) response.mask 0x0 ../../SD.c(1056)
+(14:19:44.227) End DBG SD_WriteBlock
+(14:19:47.883) SD_WriteBlock finished ../../SD.c : 1648 
+(14:19:47.998) End SD_disk_write ../../SD.c : 1727 
+(14:19:47.998) 
+(14:19:47.998) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:19:47.998) Start SD_disk_write ../../SD.c : 1623 
+(14:19:47.998) count 1 sector 16384 ../../SD.c : 1641 
+(14:19:47.998) Start DBG SD_WriteBlock addr 0x4000 ../../SD.c(1035)
+(14:19:47.998) response.mask 0x0 ../../SD.c(1056)
+(14:19:47.998) End DBG SD_WriteBlock
+(14:19:51.619) SD_WriteBlock finished ../../SD.c : 1648 
+(14:19:51.624) End SD_disk_write ../../SD.c : 1727 
+(14:19:51.703) 
+(14:19:51.703) Start SD_disk_write ../../SD.c : 1623 
+(14:19:51.703) count 1 sector 1 ../../SD.c : 1641 
+(14:19:51.703) Start DBG SD_WriteBlock addr 0x1 ../../SD.c(1035)
+(14:19:51.703) response.mask 0x0 ../../SD.c(1056)
+(14:19:51.703) End DBG SD_WriteBlock
+(14:19:55.346) SD_WriteBlock finished ../../SD.c : 1648 
+(14:19:55.352) End SD_disk_write ../../SD.c : 1727 
+(14:19:55.352) 
+(14:19:55.352) SD_disk_ioctl ../../SD.c : 1739 
+(14:19:55.446) cmd 0x0 ../../SD.c : 1752 
+(14:19:56.563) CTRL_SYNC failed ../../SD.c : 1895 
+(14:19:56.566) faild f_close : res : 1
+(14:19:56.566) =================Failed
+(14:20:33.552) <NUL>--------------------------------
+(14:20:36.589) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:20:36.672) App built on: Sep  8 2020 14:06:55
+(14:20:36.672) Press button A to read block.
+(14:20:36.672) =================
+(14:20:36.672) 1 Mount Drive
+(14:20:36.672) =================
+(14:20:36.672) =================Completed
+(14:20:36.672) =================
+(14:20:36.672) 2 Print Drive
+(14:20:36.672) =================
+(14:20:36.672) SD_disk_ioctl ../../SD.c : 1739 
+(14:20:36.672) cmd 0x2 ../../SD.c : 1752 
+(14:20:36.672) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:20:36.672) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:20:36.672) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:20:36.672) [D]System Volume Information
+(14:20:36.672) /20200903-3.txt : 		 13byte
+(14:20:36.672) =================Completed
+(14:20:36.672) =================
+(14:20:36.672) 3 File Write
+(14:20:36.672) =================
+(14:20:36.672) 0:20200903-3.txt
+(14:20:36.672) Start DBG SD_ReadBlock addr 0x40b0 ../../SD.c(1127)
+(14:20:36.738) Start SD_disk_write ../../SD.c : 1623 
+(14:20:36.759) count 1 sector 16560 ../../SD.c : 1641 
+(14:20:36.759) Start DBG SD_WriteBlock addr 0x40b0 ../../SD.c(1035)
+(14:20:36.759) response.mask 0x0 ../../SD.c(1056)
+(14:20:36.759) End DBG SD_WriteBlock
+(14:20:40.464) SD_WriteBlock finished ../../SD.c : 1648 
+(14:20:40.478) End SD_disk_write ../../SD.c : 1727 
+(14:20:40.478) 
+(14:20:40.478) Start SD_disk_write ../../SD.c : 1623 
+(14:20:40.478) count 1 sector 16384 ../../SD.c : 1641 
+(14:20:40.584) Start DBG SD_WriteBlock addr 0x4000 ../../SD.c(1035)
+(14:20:40.584) response.mask 0x0 ../../SD.c(1056)
+(14:20:40.584) End DBG SD_WriteBlock
+(14:20:44.199) SD_WriteBlock finished ../../SD.c : 1648 
+(14:20:44.208) End SD_disk_write ../../SD.c : 1727 
+(14:20:44.208) 
+(14:20:44.208) SD_disk_ioctl ../../SD.c : 1739 
+(14:20:44.208) cmd 0x0 ../../SD.c : 1752 
+(14:20:46.065) 13 written
+(14:20:46.065) =================Completed
+(14:20:46.112) =================
+(14:20:46.112) 4 Print Drive
+(14:20:46.112) =================
+(14:20:46.112) [D]System Volume Information
+(14:20:46.112) /20200903-3.txt : 		 13byte
+(14:20:46.112) =================Completed
+(14:20:46.112) =================
+(14:20:46.112) 5 File Read
+(14:20:46.112) =================
+(14:20:46.112) 0:20200903-3.txt
+(14:20:46.112) Start DBG SD_ReadBlock addr 0x40b0 ../../SD.c(1127)
+(14:20:46.112) 13 read
+(14:20:46.112) > hello world
+(14:20:46.112) 
+(14:20:46.112) hello world
+(14:20:46.112) 
+(14:20:46.112) =================Completed
+(14:20:46.112) =================
+(14:20:46.112) 6 File Write Append
+(14:20:46.112) =================
+(14:20:46.112) 0:20200903-3.txt
+(14:20:46.112) Start DBG SD_ReadBlock addr 0x40b0 ../../SD.c(1127)
+(14:20:46.112) Start SD_disk_write ../../SD.c : 1623 
+(14:20:46.112) count 1 sector 16560 ../../SD.c : 1641 
+(14:20:46.163) Start DBG SD_WriteBlock addr 0x40b0 ../../SD.c(1035)
+(14:20:46.163) response.mask 0x0 ../../SD.c(1056)
+(14:20:46.163) End DBG SD_WriteBlock
+(14:20:46.596) false ../../SD.c(860)
+(14:20:46.596) SD_WriteBlock failed ../../SD.c : 1654 
+(14:20:46.631) End SD_disk_write ../../SD.c : 1727 
+(14:20:46.631) 
+(14:20:46.631) 14 written
+(14:20:46.631) =================Completed
+(14:20:46.631) =================
+(14:20:46.631) 7 File Read
+(14:20:46.631) =================
+(14:20:46.631) 0:20200903-3.txt
+(14:20:46.631) faild f_open : res : 16
+(14:20:46.631) =================Failed
+(14:21:05.607) <NUL>--------------------------------
+(14:21:08.625) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:21:08.625) App built on: Sep  8 2020 14:06:55
+(14:21:08.625) Press button A to read block.
+(14:21:08.625) =================
+(14:21:08.625) 1 Mount Drive
+(14:21:08.625) =================
+(14:21:08.625) =================Completed
+(14:21:08.625) =================
+(14:21:08.625) 2 Print Drive
+(14:21:08.625) =================
+(14:21:08.758) Error ../../SD.c : 1466 
+(14:21:08.758) path() not found:Error(3)
+(14:21:08.758) =================Failed
+(14:21:16.116) <NUL><NUL>--------------------------------
+(14:21:34.395) SPI_SDCard_RTApp_MT3620_BareMetal
+(14:21:34.452) App built on: Sep  8 2020 14:06:55
+(14:21:34.452) Press button A to read block.
+(14:21:34.452) =================
+(14:21:34.452) 1 Mount Drive
+(14:21:34.452) =================
+(14:21:34.452) =================Completed
+(14:21:34.452) =================
+(14:21:34.452) 2 Print Drive
+(14:21:34.452) =================
+(14:21:34.452) SD_disk_ioctl ../../SD.c : 1739 
+(14:21:34.452) cmd 0x2 ../../SD.c : 1752 
+(14:21:34.452) Start DBG SD_ReadBlock addr 0x0 ../../SD.c(1127)
+(14:21:34.452) Start DBG SD_ReadBlock addr 0x1 ../../SD.c(1127)
+(14:21:34.452) Start DBG SD_ReadBlock addr 0x4000 ../../SD.c(1127)
+(14:21:34.452) [D]System Volume Information
+(14:21:34.452) /20200903-3.txt : 		 13byte
+(14:21:34.452) =================Completed
+(14:21:34.452) =================
+(14:21:34.452) 3 File Write
+(14:21:34.452) =================
+(14:21:34.504) 0:20200903-3.txt
+(14:21:34.504) Start DBG SD_ReadBlock addr 0x40b0 ../../SD.c(1127)
+(14:21:34.554) Start SD_disk_write ../../SD.c : 1623 
+(14:21:34.554) count 1 sector 16560 ../../SD.c : 1641 
+(14:21:34.554) Start DBG SD_WriteBlock addr 0x40b0 ../../SD.c(1035)
+(14:21:34.596) response.mask 0x0 ../../SD.c(1056)
+(14:21:34.596) End DBG SD_WriteBlock
+(14:21:38.272) SD_WriteBlock finished ../../SD.c : 1648 
+(14:21:38.277) End SD_disk_write ../../SD.c : 1727 
+(14:21:38.348) 
+(14:21:38.348) Start SD_disk_write ../../SD.c : 1623 
+(14:21:38.348) count 1 sector 16384 ../../SD.c : 1641 
+(14:21:38.348) Start DBG SD_WriteBlock addr 0x4000 ../../SD.c(1035)
+(14:21:38.348) response.mask 0x0 ../../SD.c(1056)
+(14:21:38.348) End DBG SD_WriteBlock
+(14:21:41.999) SD_WriteBlock finished ../../SD.c : 1648 
+(14:21:42.014) End SD_disk_write ../../SD.c : 1727 
+(14:21:42.014) 
+(14:21:42.014) SD_disk_ioctl ../../SD.c : 1739 
+(14:21:42.014) cmd 0x0 ../../SD.c : 1752 
+(14:21:43.881) 13 written
+(14:21:43.881) =================Completed
+(14:21:43.985) =================
+(14:21:43.985) 4 Print Drive
+(14:21:43.985) =================
+(14:21:43.985) [D]System Volume Information
+(14:21:43.985) /20200903-3.txt : 		 13byte
+(14:21:43.985) =================Completed
+(14:21:43.985) =================
+(14:21:43.985) 5 File Read
+(14:21:43.985) =================
+(14:21:43.985) 0:20200903-3.txt
+(14:21:43.985) Start DBG SD_ReadBlock addr 0x40b0 ../../SD.c(1127)
+(14:21:43.985) 13 read
+(14:21:43.985) > hello world
+(14:21:43.985) 
+(14:21:43.985) hello world
+(14:21:43.985) 
+(14:21:43.985) =================Completed
+(14:21:43.985) =================
+(14:21:43.985) 6 File Write Append
+(14:21:43.985) =================
+(14:21:43.985) 0:20200903-3.txt
+(14:21:43.985) Start DBG SD_ReadBlock addr 0x40b0 ../../SD.c(1127)
+(14:21:43.985) Start SD_disk_write ../../SD.c : 1623 
+(14:21:43.985) count 1 sector 16560 ../../SD.c : 1641 
+(14:21:43.985) Start DBG SD_WriteBlock addr 0x40b0 ../../SD.c(1035)
+(14:21:43.985) response.mask 0x0 ../../SD.c(1056)
+(14:21:43.985) End DBG SD_WriteBlock
+(14:21:47.643) SD_WriteBlock finished ../../SD.c : 1648 
+(14:21:47.676) End SD_disk_write ../../SD.c : 1727 
+(14:21:47.676) 
+(14:21:47.676) Start SD_disk_write ../../SD.c : 1623 
+(14:21:47.676) count 1 sector 16384 ../../SD.c : 1641 
+(14:21:47.676) Start DBG SD_WriteBlock addr 0x4000 ../../SD.c(1035)
+(14:21:47.676) response.mask 0x0 ../../SD.c(1056)
+(14:21:47.676) End DBG SD_WriteBlock
+(14:21:51.369) SD_WriteBlock finished ../../SD.c : 1648 
+(14:21:51.373) End SD_disk_write ../../SD.c : 1727 
+(14:21:51.439) 
+(14:21:51.439) SD_disk_ioctl ../../SD.c : 1739 
+(14:21:51.439) cmd 0x0 ../../SD.c : 1752 
+(14:21:53.228) 14 written
+(14:21:53.228) =================Completed
+(14:21:53.352) =================
+(14:21:53.352) 7 File Read
+(14:21:53.352) =================
+(14:21:53.352) 0:20200903-3.txt
+(14:21:53.352) Start DBG SD_ReadBlock addr 0x40b0 ../../SD.c(1127)
+(14:21:53.352) 27 read
+(14:21:53.352) > hello world
+(14:21:53.352) hello CANTUS
+(14:21:53.352) 
+(14:21:53.352) hello world
+(14:21:53.352) hello CANTUS
+(14:21:53.352) 
+(14:21:53.352) =================Completed
