@@ -82,7 +82,7 @@ static void HandleButtonTimerIrqDeferred(void)
             uint32_t i, j, k;
             uint8_t buffw[blocklen];
 
-            for (j = 0; j < 1000; j++)
+            for (j = 0; j < 0x762c00; j++)
             {
                 // write 0
 
