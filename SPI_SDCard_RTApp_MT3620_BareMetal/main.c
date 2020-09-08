@@ -343,7 +343,7 @@ _Noreturn void RTCoreMain(void)
     
 #if 1
     BYTE work[4096];
-    res = f_mkfs("", 0, 512, work, sizeof(work));
+    res = f_mkfs("", FM_FAT32, 512, work, sizeof(work));
     if (res != FR_OK)
     {
         UART_Printf(debug, "f_mkfs Error res = %d\r\n", res);

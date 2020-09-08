@@ -21,6 +21,13 @@
 #include "ff.h"			/* Declarations of FatFs API */
 #include "diskio.h"		/* Declarations of device I/O functions */
 
+#if 1
+// 20200907 taylor
+#include "lib/UART.h"
+#include "lib/Print.h"
+#endif
+
+extern UART      *debug;
 
 /*--------------------------------------------------------------------------
 
@@ -5322,6 +5329,11 @@ FRESULT f_mkfs (
 	DWORD tbl[3];
 #endif
 
+    #define DBG_F_MKFS
+    #ifdef DBG_F_MKFS
+    UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
+
 
 	/* Check mounted drive and clear work area */
 	vol = get_ldnumber(&path);					/* Get target logical drive */
@@ -5336,8 +5348,23 @@ FRESULT f_mkfs (
 	if (stat & STA_PROTECT) return FR_WRITE_PROTECTED;
 	if (disk_ioctl(pdrv, GET_BLOCK_SIZE, &sz_blk) != RES_OK || !sz_blk || sz_blk > 32768 || (sz_blk & (sz_blk - 1))) sz_blk = 1;	/* Erase block to align data area */
 #if _MAX_SS != _MIN_SS		/* Get sector size of the medium if variable sector size cfg. */
+
+    #ifdef DBG_F_MKFS
+    UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
+
 	if (disk_ioctl(pdrv, GET_SECTOR_SIZE, &ss) != RES_OK) return FR_DISK_ERR;
+
+    #ifdef DBG_F_MKFS
+    UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
+    
 	if (ss > _MAX_SS || ss < _MIN_SS || (ss & (ss - 1))) return FR_DISK_ERR;
+
+    #ifdef DBG_F_MKFS
+    UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
+    
 #else
 	ss = _MAX_SS;
 #endif
@@ -5361,12 +5388,26 @@ FRESULT f_mkfs (
 		sz_vol = ld_dword(pte + PTE_SizLba);	/* Get volume size */
 	} else {
 		/* Create a single-partition in this function */
+    
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+    
 		if (disk_ioctl(pdrv, GET_SECTOR_COUNT, &sz_vol) != RES_OK) return FR_DISK_ERR;
+
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+    
 		b_vol = (opt & FM_SFD) ? 0 : 63;		/* Volume start sector */
 		if (sz_vol < b_vol) return FR_MKFS_ABORTED;
 		sz_vol -= b_vol;						/* Volume size */
 	}
 	if (sz_vol < 128) return FR_MKFS_ABORTED;	/* Check if volume size is >=128s */
+
+    #ifdef DBG_F_MKFS
+    UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
 
 	/* Pre-determine the FAT type */
 	do {
@@ -5381,9 +5422,23 @@ FRESULT f_mkfs (
 				fmt = FS_FAT32; break;
 			}
 		}
+        
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+        
 		if (!(opt & FM_FAT)) return FR_INVALID_PARAMETER;	/* no-FAT? */
+        
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+        
 		fmt = FS_FAT16;
 	} while (0);
+
+    #ifdef DBG_F_MKFS
+    UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
 
 #if _FS_EXFAT
 	if (fmt == FS_EXFAT) {	/* Create an exFAT volume */
@@ -5443,14 +5498,28 @@ FRESULT f_mkfs (
 			sum = xsum32(buf[i + 0] = (BYTE)ch, sum);		/* Put it into the write buffer */
 			sum = xsum32(buf[i + 1] = (BYTE)(ch >> 8), sum);
 			i += 2; szb_case += 2;
+
+            #ifdef DBG_F_MKFS
+            UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
+        
 			if (!si || i == szb_buf) {		/* Write buffered data when buffer full or end of process */
 				n = (i + ss - 1) / ss;
 				if (disk_write(pdrv, buf, sect, n) != RES_OK) return FR_DISK_ERR;
 				sect += n; i = 0;
 			}
+
+            #ifdef DBG_F_MKFS
+            UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+            #endif
+            
 		} while (si);
 		tbl[1] = (szb_case + au * ss - 1) / (au * ss);	/* Number of up-case table clusters */
 		tbl[2] = 1;										/* Number of root dir clusters */
+
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
 
 		/* Initialize the allocation bitmap */
 		sect = b_data; nsect = (szb_bit + ss - 1) / ss;	/* Start of bitmap and number of sectors */
@@ -5463,6 +5532,10 @@ FRESULT f_mkfs (
 			if (disk_write(pdrv, buf, sect, n) != RES_OK) return FR_DISK_ERR;
 			sect += n; nsect -= n;
 		} while (nsect);
+
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
 
 		/* Initialize the FAT */
 		sect = b_fat; nsect = sz_fat;	/* Start of FAT and number of FAT sectors */
@@ -5658,7 +5731,16 @@ FRESULT f_mkfs (
 			mem_cpy(buf + BS_VolLab, "NO NAME    " "FAT     ", 19);	/* Volume label, FAT signature */
 		}
 		st_word(buf + BS_55AA, 0xAA55);					/* Signature (offset is fixed here regardless of sector size) */
+
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
+            
 		if (disk_write(pdrv, buf, b_vol, 1) != RES_OK) return FR_DISK_ERR;	/* Write it to the VBR sector */
+
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
 
 		/* Create FSINFO record if needed */
 		if (fmt == FS_FAT32) {
@@ -5687,11 +5769,25 @@ FRESULT f_mkfs (
 			nsect = sz_fat;		/* Number of FAT sectors */
 			do {	/* Fill FAT sectors */
 				n = (nsect > sz_buf) ? sz_buf : nsect;
+                
+                #ifdef DBG_F_MKFS
+                UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+                #endif
+                
 				if (disk_write(pdrv, buf, sect, (UINT)n) != RES_OK) return FR_DISK_ERR;
+
+                #ifdef DBG_F_MKFS
+                UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+                #endif
+        
 				mem_set(buf, 0, ss);
 				sect += n; nsect -= n;
 			} while (nsect);
 		}
+
+        #ifdef DBG_F_MKFS
+        UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+        #endif
 
 		/* Initialize root directory (fill with zero) */
 		nsect = (fmt == FS_FAT32) ? pau : sz_dir;	/* Number of root directory sectors */
@@ -5701,6 +5797,10 @@ FRESULT f_mkfs (
 			sect += n; nsect -= n;
 		} while (nsect);
 	}
+
+    #ifdef DBG_F_MKFS
+    UART_Printf(debug,"DBG_F_MKFS %s(%d)\r\n", __FILE__, __LINE__);
+    #endif
 
 	/* Determine system ID in the partition table */
 	if (_FS_EXFAT && fmt == FS_EXFAT) {
