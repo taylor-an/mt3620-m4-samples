@@ -169,10 +169,10 @@ static void InvokeCallbacks(void)
 // 20200903 taylor
 
 FRESULT printdrive (int drive, char* path, int level);
-void filewrite(int drive, char* filename, char* text);
-void filewrite_append(int drive, char* filename, char* text);
+bool filewrite(int drive, char* filename, char* text);
+bool filewrite_append(int drive, char* filename, char* text);
 char* fileread(int drive, char* filename, int* len);
-void fileremove(int drive, char* filename);
+bool fileremove(int drive, char* filename);
 #endif
 
 #if 0
@@ -325,7 +325,7 @@ _Noreturn void RTCoreMain(void)
 	if(res != FR_OK)
 	{
 		UART_Printf(debug, "Mount Error\r\n");
-#if 1
+#if 0
         BYTE work[4096];
 		res = f_mkfs(0, 2, 4096, work, sizeof(work));
 		if(res  != FR_OK)
@@ -341,7 +341,7 @@ _Noreturn void RTCoreMain(void)
 	}
 	UART_Printf(debug, "=================Completed\r\n");
     
-#if 1
+#if 0
     BYTE work[4096];
     res = f_mkfs("", FM_FAT32, 512, work, sizeof(work));
     if (res != FR_OK)
@@ -385,7 +385,11 @@ _Noreturn void RTCoreMain(void)
 	UART_Printf(debug, "2 Print Drive\r\n");
 	UART_Printf(debug, "=================\r\n");
 	
-	printdrive(0, "", 1);
+    if (0 != printdrive(0, "", 1))
+    {
+        UART_Printf(debug, "=================Failed\r\n");
+        while (1);
+    }
 	UART_Printf(debug, "=================Completed\r\n");
 	//================================================================================
 
@@ -396,10 +400,13 @@ _Noreturn void RTCoreMain(void)
 	UART_Printf(debug, "3 File Write\r\n");
 	UART_Printf(debug, "=================\r\n");
 	
-	filewrite(0, TEST_FILE, "hello world\r\n");
+    if (false == filewrite(0, TEST_FILE, "hello world\r\n"))
+    {
+        UART_Printf(debug, "=================Failed\r\n");
+        while (1);
+    }
 	UART_Printf(debug, "=================Completed\r\n");
 
-    while(1);
 	//================================================================================
 
 	//================================================================================
@@ -409,7 +416,11 @@ _Noreturn void RTCoreMain(void)
 	UART_Printf(debug, "4 Print Drive\r\n");
 	UART_Printf(debug, "=================\r\n");
 	
-	printdrive(0, "", 1);
+	if(0 != printdrive(0, "", 1))
+    {
+        UART_Printf(debug, "=================Failed\r\n");
+        while (1);
+    }
 	UART_Printf(debug, "=================Completed\r\n");
 	//================================================================================
 
@@ -421,6 +432,11 @@ _Noreturn void RTCoreMain(void)
 	UART_Printf(debug, "=================\r\n");
 	
 	file_buffer = fileread(0, TEST_FILE, &file_read_len);	
+    if (file_buffer == 0)
+    {
+        UART_Printf(debug, "=================Failed\r\n");
+        while (1);
+    }
 	UART_Printf(debug, "%s\r\n", file_buffer);
 	free(file_buffer);
 	UART_Printf(debug, "=================Completed\r\n");
@@ -433,7 +449,11 @@ _Noreturn void RTCoreMain(void)
 	UART_Printf(debug, "6 File Write Append\r\n");
 	UART_Printf(debug, "=================\r\n");
 	
-	filewrite_append(0, TEST_FILE, "hello CANTUS\r\n");
+	if(false == filewrite_append(0, TEST_FILE, "hello CANTUS\r\n"))
+    {
+        UART_Printf(debug, "=================Failed\r\n");
+        while (1);
+    }
 	UART_Printf(debug, "=================Completed\r\n");
 	//================================================================================
 	
@@ -445,6 +465,11 @@ _Noreturn void RTCoreMain(void)
 	UART_Printf(debug, "=================\r\n");
 	
 	file_buffer = fileread(0, TEST_FILE, &file_read_len);
+    if(file_buffer == 0)
+    {
+        UART_Printf(debug, "=================Failed\r\n");
+        while (1);
+    }
 	UART_Printf(debug, "%s\r\n", file_buffer);
 	free(file_buffer);
 	UART_Printf(debug, "=================Completed\r\n");
@@ -608,7 +633,7 @@ FRESULT printdrive (int drive, char* path, int level)
     return res;
 }
 
-void filewrite(int drive, char* filename, char* text)
+bool filewrite(int drive, char* filename, char* text)
 {
 	FIL fsrc;
 	FIL* fp = &fsrc;
@@ -627,14 +652,14 @@ void filewrite(int drive, char* filename, char* text)
 	if(res != FR_OK)
 	{
 		UART_Printf(debug, "faild f_open : res : %d\r\n", res);
-		return;
+		return false;
 	}
 	
 	res = f_write(fp, text, strlen(text), &bw);
     if(res != FR_OK)
 	{
 		UART_Printf(debug, "faild f_write : res : %d\r\n", res);
-		return;
+        return false;
 	}
     
     #if 0
@@ -681,9 +706,11 @@ void filewrite(int drive, char* filename, char* text)
 	}
 
 	UART_Printf(debug, "%d written\r\n", bw);
+
+    return true;
 }
 
-void filewrite_append(int drive, char* filename, char* text)
+bool filewrite_append(int drive, char* filename, char* text)
 {
 	FIL fsrc;
 	FIL* fp = &fsrc;
@@ -700,7 +727,7 @@ void filewrite_append(int drive, char* filename, char* text)
 	if(res != FR_OK)
 	{
 		UART_Printf(debug, "faild f_open : res : %d\r\n", res);
-		return;
+		return false;
 	}
 	
 	res = f_lseek(fp, f_size(fp));
@@ -709,6 +736,7 @@ void filewrite_append(int drive, char* filename, char* text)
 	f_close(fp);
 
 	UART_Printf(debug, "%d written\r\n", bw);
+    return true;
 }
 
 char* fileread(int drive, char* filename, int* len)
@@ -749,7 +777,7 @@ char* fileread(int drive, char* filename, int* len)
 	return pngbuf;
 }
 
-void fileremove(int drive, char* filename)
+bool fileremove(int drive, char* filename)
 {
 	FRESULT  res;
 	char string[100];
@@ -760,10 +788,11 @@ void fileremove(int drive, char* filename)
     if(res != FR_OK)
     {
         UART_Printf(debug, "Failed f_unlink : res : %d\r\n", res);
-        return;
+        return false;
     }
 	
     UART_Printf(debug, "File Removed\r\n");
+    return true;
 }
 #endif
 

@@ -824,6 +824,26 @@ static bool SD_WriteNDataPacket(SPIMaster *interface, uintptr_t size, void *data
 #endif
 
 #if 1
+// 20200908 taylor
+static bool SD_Wait(SPIMaster* interface)
+{
+    unsigned retries = 65536;
+    uint8_t byte = 0xFF;
+    unsigned i;
+
+    for (i = 0; (i < retries) && (byte == 0xFF); i++) {
+        if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
+#ifdef DBG_SD_WRITEDATAPACKET
+            UART_Printf(debug, "false %s(%d)\r\n", __FILE__, __LINE__);
+#endif
+            return false;
+        }
+    }
+}
+#endif
+
+
+#if 1
 // 20200831 taylor
 static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
 {
@@ -874,9 +894,9 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
             return false;
         }
     }
-#if 0
+#if 1
     uint16_t crc;
-    if (!SPITransfer__AsyncTimeout(card->interface, &crc, sizeof(crc), SPI_READ)) {
+    if (!SPITransfer__AsyncTimeout(interface, &crc, sizeof(crc), SPI_READ)) {
         return false;
     }
 #endif
@@ -1866,13 +1886,14 @@ DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff)
 			break;
 		case CTRL_SYNC:
       #if 1
-            if(SD_ClockBurst(driver, 74, true))
+            if(SD_Wait(driver))
             {
                 res = RES_OK;
             }
             else
             {
                 UART_Printf(debug, "CTRL_SYNC failed %s : %d \r\n", __FILE__, __LINE__);
+                res = RES_ERROR;
             }
       #else
       
