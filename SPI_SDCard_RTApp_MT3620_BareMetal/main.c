@@ -18,6 +18,9 @@
 
 #include "SD.h"
 
+#define TARGET_ASG210
+#define TAYLOR_20210107
+
 /* Set below to control # of blocks read and written */
 //#define NUM_BLOCKS_WRITE 8388608 // 4GB
 #define NUM_BLOCKS_WRITE 2000
@@ -146,6 +149,62 @@ static void buttonB(void)
     dataMultiplier++;
 }
 
+#ifdef TAYLOR_20210107
+int WriteReadCompare(uint32_t blocknum)
+{
+//#define DBG_WRITEREADCOMPARE
+#ifdef DBG_WRITEREADCOMPARE
+    UART_Printf(debug, "Writing to card block %d : ", blocknum);
+#endif
+
+    static uint8_t buff[MAX_WRITE_BLOCK_LEN] = { 0 };
+    static uint8_t multiplier = 1;
+    uintptr_t blocklen = SD_GetBlockLen(card);
+
+    // update buffer
+    for (uintptr_t i = 0; i < blocklen; i++) {
+        buff[i] = (uint8_t)((i * multiplier) % 255);
+    }
+    if (!SD_WriteBlock(card, blocknum, buff)) {
+        UART_Printf(debug,
+            "ERROR: Failed to write %d block of SD card\r\n", blocknum);
+        return -1;
+    }
+#ifdef DBG_WRITEREADCOMPARE
+    else {
+        UART_Printf(debug, "OK (x%u)\r\n", multiplier);
+    }
+#endif
+
+    multiplier++;
+
+#ifdef DBG_WRITEREADCOMPARE
+    UART_Printf(debug, "Reading card block %d : \r\n", blocknum);
+#endif
+    uint8_t rbuff[blocklen];
+    if (!SD_ReadBlock(card, blocknum, rbuff)) {
+        UART_Printf(debug,
+            "ERROR: Failed to read %d block of SD card\r\n", blocknum);
+        return -1;
+    }
+    else {
+        //UART_Print(debug, "SD Card Data Compare:\r\n");
+        uintptr_t i;
+        for (i = 0; i < blocklen; i++) {
+            if (buff[i] != rbuff[i])
+            {
+                UART_Printf(debug, "Compare Failed Block %d\r\n", blocknum);
+                UART_Printf(debug, "buff[%d] %x != rbuff[%d] %x\r\n", i, buff[i], i, rbuff[i]);
+
+                return -1;
+            }
+        }
+    }
+
+    return 0;
+}
+#endif
+
 typedef struct ButtonState {
     bool         prevState;
     CallbackNode cbn;
@@ -221,7 +280,11 @@ _Noreturn void RTCoreMain(void)
     UART_Print(debug, "SPI_SDCard_RTApp_MT3620_BareMetal\r\n");
     UART_Print(debug, "App built on: " __DATE__ " " __TIME__ "\r\n");
 
+#ifdef TARGET_ASG210
+    driver = SPIMaster_Open(MT3620_UNIT_ISU2);
+#else
     driver = SPIMaster_Open(MT3620_UNIT_ISU1);
+#endif
     if (!driver) {
         UART_Print(debug,
             "ERROR: SPI initialisation failed\r\n");
@@ -229,7 +292,11 @@ _Noreturn void RTCoreMain(void)
     SPIMaster_DMAEnable(driver, false);
 
     // Use CSB for chip select.
+#ifdef TARGET_ASG210
+    SPIMaster_Select(driver, 0);
+#else
     SPIMaster_Select(driver, 1);
+#endif
 
     card = SD_Open(driver);
     if (!card) {
@@ -237,6 +304,83 @@ _Noreturn void RTCoreMain(void)
             "ERROR: Failed to open SD card.\r\n");
     }
 
+#ifdef TARGET_ASG210
+#ifdef TAYLOR_20210107
+    long int sd_capacity = (1 * 1000) * (1 * 1000) * 1000 * 4;
+    uint32_t sd_blocksize = SD_GetBlockLen(card);
+    uint32_t sd_blockcnt = sd_capacity / sd_blocksize;
+    uint32_t blocknum;
+
+    UART_Printf(debug, "sd_capacity 0x%x(%lu)\r\n", sd_capacity, sd_capacity);
+    UART_Printf(debug, "sd_blocksize %d\r\n", sd_blocksize);
+    UART_Printf(debug, "sd_blockcnt %d\r\n", sd_blockcnt);
+
+    sd_blockcnt = 7744512;
+    UART_Printf(debug, "sd_blockcnt %d\r\n", sd_blockcnt);
+    UART_Printf(debug, "sd_blockcnt % 7000000 %d\r\n", sd_blockcnt % 7000000);
+#if 1
+    // It took 39 minutes from 0 to 744511 block.
+    int ret;
+    // 1byte * 512
+    for (blocknum = 0; blocknum < sd_blockcnt / 7000000;)
+    {
+        ret = WriteReadCompare(blocknum);
+        if (ret == -1)
+        {
+            UART_Printf(debug, "Failed block %d\r\n", blocknum);
+
+            int reopen_cnt = 1;
+            do
+            {
+                SD_Close(card);
+
+                SPIMaster_Close(driver);
+
+                driver = SPIMaster_Open(MT3620_UNIT_ISU2);
+                if (!driver) {
+                    UART_Print(debug,
+                        "ERROR: SPI initialisation failed\r\n");
+                }
+                else
+                {
+                    SPIMaster_DMAEnable(driver, false);
+
+                    // Use CSB for chip select.
+                    SPIMaster_Select(driver, 0);
+
+                    card = SD_Open(driver);
+                    if (!card) {
+                        UART_Printf(debug,
+                            "ERROR: Failed to open SD card tried %d.\r\n", reopen_cnt++);
+                    }
+                    else
+                    {
+                        UART_Printf(debug,
+                            "Opened SD card tried %d.\r\n", reopen_cnt);
+                        break;
+                    }
+                }
+            } while (1);
+
+            UART_Printf(debug, "Retry failed block %d\r\n", blocknum);
+        }
+        else
+        {
+            if (blocknum % 10000 == 0)
+            {
+                UART_Printf(debug, "Completed block %d\r\n", blocknum);
+            }
+            blocknum++;
+        }
+    }
+
+    UART_Printf(debug, "Completed block 0 to %d\r\n", blocknum - 1);
+#endif
+#else
+    buttonB();
+    buttonA();
+#endif
+#else
 	UART_Print(debug,
         "Press button A to read block, and B to write block.\r\n"
         "Note that with every press of B, the multiplier on each\r\n"
@@ -256,6 +400,7 @@ _Noreturn void RTCoreMain(void)
         buttonTimeout, 100, GPT_UNITS_MILLISEC, handleButtonCallback)) != ERROR_NONE) {
         UART_Printf(debug, "ERROR: Starting timer (%ld)\r\n", error);
     }
+#endif
 
     for (;;) {
         __asm__("wfi");
