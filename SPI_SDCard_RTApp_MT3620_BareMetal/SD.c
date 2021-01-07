@@ -1,14 +1,34 @@
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+#include "lib/mt3620/gpt.h"
+
+#endif
 #include "SD.h"
 
 // This is the maximum number of SD cards which can be opened at once.
 #define SD_CARD_MAX 4
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+#define SPI_SD_TIMEOUT    200 // [ms]
+#else
 #define SPI_SD_TIMEOUT 10 // [s]
+#endif
 #if 1
 // 20201014 taylor
 // from CodethinkLabs
 // Commit: 144f6a9b2e22301c29405cdeae62126d79251b64 [144f6a9]
 
 #define NUM_RETRIES 65536
+#endif
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+#define NUM_WRITE_RETRIES 3
 #endif
 
 static GPT *timer = NULL;
@@ -260,6 +280,78 @@ bool SPITransfer__AsyncTimeout(
 }
 
 #else
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+static bool SPITransfer__SyncTimeout(
+    SPIMaster         *interface,
+    void              *data,
+    uintptr_t          length,
+    SPI_TRANSFER_TYPE  transferType)
+{
+    if (!interface) {
+        return false;
+    }
+
+    SPITransfer transfer = {
+        .writeData = NULL,
+        .readData  = NULL,
+        .length    = length,
+    };
+
+    int32_t status;
+    switch (transferType) {
+    case SPI_READ:
+        transfer.readData = data;
+        status = SPIMaster_TransferSequentialAsync(interface, &transfer, 1, transferDoneCallback);
+        break;
+
+    case SPI_WRITE:
+        transfer.writeData = data;
+        status = SPIMaster_TransferSequentialAsync(interface, &transfer, 1, transferDoneCallback);
+        break;
+
+    default:
+        return false;
+    }
+
+    if (status != ERROR_NONE) {
+        return false;
+    }
+
+    if (GPT_IsEnabled(timer)) {
+        GPT_Stop(timer);
+    }
+    unsigned retries = NUM_RETRIES;
+    while ((retries-- > 0) && (GPT_StartTimeout(
+        timer, SPI_SD_TIMEOUT, GPT_UNITS_MILLISEC, NULL) == ERROR_NONE))
+        ;
+    if (retries == 0) {
+        transferStateReset();
+        return false;
+    }
+
+    while (!transferState.done) {
+        __asm__("wfi");
+        if (!GPT_IsEnabled(timer)) {
+            // Timed out, so cancel
+            SPIMaster_TransferCancel(interface);
+            transferState.status = ERROR_TIMEOUT;
+            break;
+        }
+    }
+
+    status = transferState.status;
+    transferStateReset();
+
+    if (status != ERROR_NONE) {
+        return false;
+    }
+
+    return true;
+}
+#else
 static bool SPITransfer__AsyncTimeout(
     SPIMaster         *interface,
     void              *data,
@@ -317,6 +409,7 @@ static bool SPITransfer__AsyncTimeout(
     return true;
 }
 #endif
+#endif
 
 static bool SD_ClockBurst(SPIMaster* interface, unsigned cycles, bool select)
 {
@@ -336,9 +429,18 @@ static bool SD_ClockBurst(SPIMaster* interface, unsigned cycles, bool select)
     // We use async here so we can timeout if the SD card hangs
     uint8_t dummy[(cycles + 7) / 8];
 
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    if (!SPITransfer__SyncTimeout(interface, &dummy, sizeof(dummy), SPI_READ)) {
+        return false;
+    }
+#else
     if (!SPITransfer__AsyncTimeout(interface, &dummy, sizeof(dummy), SPI_READ)) {
         return false;
     }
+#endif
 
     if (!select) {
         status = SPIMaster_SelectEnable(interface, true);
@@ -355,9 +457,18 @@ static bool SD_AwaitResponse(SPIMaster *interface, uintptr_t size, void *respons
     uint8_t byte = 0xFF;
     unsigned i;
     for (i = 0; (i < retries) && (byte == 0xFF); i++) {
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+        if (!SPITransfer__SyncTimeout(interface, &byte, 1, SPI_READ)) {
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
             return false;
         }
+#endif
     }
 
     uint8_t* r = response;
@@ -366,9 +477,18 @@ static bool SD_AwaitResponse(SPIMaster *interface, uintptr_t size, void *respons
         // If the response contains an error, it won't have a payload.
         size = 1;
     } else if (size > 1) {
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+        if (!SPITransfer__SyncTimeout(interface, &r[1], (size - 1), SPI_READ)) {
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(interface, &r[1], (size - 1), SPI_READ)) {
             return false;
         }
+#endif
     }
 
     return true;
@@ -383,9 +503,18 @@ static bool SD_CommandIncomplete(SPIMaster *interface, SD_CMD cmd, uint32_t argu
     frame.crc      = SD_Crc7(&frame, (sizeof(frame.index) + sizeof(frame.argument)));
 
 
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    if (!SPITransfer__SyncTimeout(interface, &frame, sizeof(frame), SPI_WRITE)) {
+        return false;
+    }
+#else
     if (!SPITransfer__AsyncTimeout(interface, &frame, sizeof(frame), SPI_WRITE)) {
         return false;
     }
+#endif
 
     // Ignore first byte of response.
     if (!SD_ClockBurst(interface, 8, true)) {
@@ -425,7 +554,11 @@ static bool SD_ReadDataPacket(SPIMaster *interface, uintptr_t size, void *data)
     uint8_t byte = 0xFF;
     unsigned i;
     for (i = 0; (i < retries) && (byte == 0xFF); i++) {
+#if 1
+        if (!SPITransfer__SyncTimeout(interface, &byte, 1, SPI_READ)) {
+#else
         if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
+#endif
             #ifdef DBG_SD_READDATAPACKET
             UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
             #endif
@@ -447,7 +580,11 @@ static bool SD_ReadDataPacket(SPIMaster *interface, uintptr_t size, void *data)
             packet = remain;
         }
 
+#if 1
+        if (!SPITransfer__SyncTimeout(interface, data_byte, packet, SPI_READ)) {
+#else
         if (!SPITransfer__AsyncTimeout(interface, data_byte, packet, SPI_READ)) {
+#endif
             #ifdef DBG_SD_READDATAPACKET
             UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
             #endif
@@ -456,7 +593,11 @@ static bool SD_ReadDataPacket(SPIMaster *interface, uintptr_t size, void *data)
     }
 
     uint16_t crc;
+#if 1
+    if (!SPITransfer__SyncTimeout(interface, &crc, sizeof(crc), SPI_READ)) {
+#else
     if (!SPITransfer__AsyncTimeout(interface, &crc, sizeof(crc), SPI_READ)) {
+#endif
         #ifdef DBG_SD_READDATAPACKET
         UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
         #endif
@@ -486,9 +627,18 @@ static bool SD_ReadDataPacket(const SDCard *card, uintptr_t size, void *data)
     uint8_t byte = 0xFF;
     unsigned i;
     for (i = 0; (i < retries) && (byte == 0xFF); i++) {
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+        if (!SPITransfer__SyncTimeout(card->interface, &byte, 1, SPI_READ)) {
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(card->interface, &byte, 1, SPI_READ)) {
             return false;
         }
+#endif
     }
 #if 1
     // 20201014 taylor
@@ -511,15 +661,33 @@ static bool SD_ReadDataPacket(const SDCard *card, uintptr_t size, void *data)
             packet = remain;
         }
 
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+        if (!SPITransfer__SyncTimeout(card->interface, data_byte, packet, SPI_READ)) {
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(card->interface, data_byte, packet, SPI_READ)) {
             return false;
         }
+#endif
     }
 
     uint16_t crc;
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    if (!SPITransfer__SyncTimeout(card->interface, &crc, sizeof(crc), SPI_READ)) {
+        return false;
+    }
+#else
     if (!SPITransfer__AsyncTimeout(card->interface, &crc, sizeof(crc), SPI_READ)) {
         return false;
     }
+#endif
 
     // TODO: Verify the CRC.
 
@@ -530,7 +698,7 @@ static bool SD_ReadDataPacket(const SDCard *card, uintptr_t size, void *data)
 }
 #endif
 
-#if 1
+#if 0
 // 20201014 taylor
 // from CodethinkLabs
 // Commit: 144f6a9b2e22301c29405cdeae62126d79251b64 [144f6a9]
@@ -538,13 +706,29 @@ static bool SD_ReadDataPacket(const SDCard *card, uintptr_t size, void *data)
 static bool SD_WriteDataPacket(SDCard *card, uintptr_t size, const void *data)
 {
     // Clock burst for >= 1 byte
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    SD_ClockBurst(card->interface, 16, false);
+#else
     SD_ClockBurst(card->interface, 2, false);
+#endif
 
     // Write data token
     static uint8_t write_token = DATA_TOKEN_WRITE_SINGLE;
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    if (!SPITransfer__SyncTimeout(card->interface, &write_token, 1, SPI_WRITE)) {
+        return false;
+    }
+#else
     if (!SPITransfer__AsyncTimeout(card->interface, &write_token, 1, SPI_WRITE)) {
         return false;
     }
+#endif
 
     // Write data
     uint8_t *data_byte = (uint8_t*)data;
@@ -555,30 +739,61 @@ static bool SD_WriteDataPacket(SDCard *card, uintptr_t size, const void *data)
             packet = remain;
         }
 
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+        if (!SPITransfer__SyncTimeout(
+            card->interface, data_byte, packet, SPI_WRITE))
+        {
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(
             card->interface, data_byte, packet, SPI_WRITE))
         {
             return false;
         }
+#endif
     }
 
     // Write crc
     // TODO: implement 16 bit crc calc (SPI mode SD cards ignore CRC)
     static uint16_t blank_crc = 0xFFFF;
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    if (!SPITransfer__SyncTimeout(
+        card->interface, &blank_crc, sizeof(blank_crc), SPI_WRITE))
+    {
+        return false;
+    }
+#else
     if (!SPITransfer__AsyncTimeout(
         card->interface, &blank_crc, sizeof(blank_crc), SPI_WRITE))
     {
         return false;
     }
+#endif
 
     // Read data response
     unsigned retries = NUM_RETRIES;
     uint8_t byte = 0xFF;
     unsigned i;
     for (i = 0; (i < retries) && (byte == 0xFF); i++) {
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+        if (!SPITransfer__SyncTimeout(card->interface, &byte, 1, SPI_READ)) {
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(card->interface, &byte, 1, SPI_READ)) {
             return false;
         }
+#endif
     }
     if ((byte & 0xF) != DATA_RESP_ACCEPTED) {
         return false;
@@ -588,9 +803,18 @@ static bool SD_WriteDataPacket(SDCard *card, uintptr_t size, const void *data)
     unsigned busy_waits = NUM_RETRIES;
     byte = 0x00;
     for (i = 0; (i < busy_waits) && (byte == 0x00); i++) {
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+        if (!SPITransfer__SyncTimeout(card->interface, &byte, 1, SPI_READ)) {
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(card->interface, &byte, 1, SPI_READ)) {
             return false;
         }
+#endif
     }
 
     if (byte == 0x00) {
@@ -772,12 +996,22 @@ SDCard *SD_Open(SPIMaster *interface)
         return NULL;
     }
 
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    if (!(timer = GPT_Open(
+        MT3620_UNIT_GPT3, MT3620_GPT_3_LOW_SPEED, GPT_MODE_ONE_SHOT))) {
+        return NULL;
+    }
+#else
     #if 1
     // 20200902 taylor
     if (!(timer = GPT_Open(MT3620_UNIT_GPT1, 993, GPT_MODE_ONE_SHOT))) {
         return NULL;
     }
     #endif
+#endif
 
     // Configure SPI Master to 400 kHz.
     SPIMaster_Configure(interface, 0, 0, 400000);
@@ -793,7 +1027,7 @@ SDCard *SD_Open(SPIMaster *interface)
         return NULL;
     }
 
-    #if 1
+    #if 0
     SD_ReadCSD_test(interface);
     #else
     // 20200902 taylor
@@ -844,7 +1078,7 @@ bool SD_SetBlockLen(SDCard *card, uint32_t len)
     return true;
 }
 
-#if 1
+#if 0
 // 20200907 taylor
 static bool SD_WriteStopPacket(SPIMaster *interface)
 {
@@ -947,12 +1181,22 @@ static bool SD_Wait(SPIMaster* interface)
     unsigned i;
 
     for (i = 0; (i < retries) && (byte == 0xFF); i++) {
+#if 1
+// 20210107 taylor
+        if (!SPITransfer__SyncTimeout(interface, &byte, 1, SPI_READ)) {
+#ifdef DBG_SD_WRITEDATAPACKET
+            UART_Printf(debug, "false %s(%d)\r\n", __FILE__, __LINE__);
+#endif
+            return false;
+        }
+#else
         if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
 #ifdef DBG_SD_WRITEDATAPACKET
             UART_Printf(debug, "false %s(%d)\r\n", __FILE__, __LINE__);
 #endif
             return false;
         }
+#endif
     }
 }
 #endif
@@ -970,7 +1214,11 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
     unsigned i;
 
     for (i = 0; (i < retries) && (byte == 0xFF); i++) {
+#if 1
+        if (!SPITransfer__SyncTimeout(interface, &byte, 1, SPI_READ)) {
+#else
         if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
+#endif
             #ifdef DBG_SD_WRITEDATAPACKET
             UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
             #endif
@@ -980,7 +1228,11 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
 
     byte = 0xFE;
 #if 1
+#if 1
+    if (!SPITransfer__SyncTimeout(interface, &byte, 1, SPI_WRITE)) {
+#else
     if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_WRITE)) {
+#endif
         #ifdef DBG_SD_WRITEDATAPACKET
         UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
         #endif
@@ -1002,7 +1254,11 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
             packet = remain;
         }
 
+#if 1
+        if (!SPITransfer__SyncTimeout(interface, data_byte, packet, SPI_WRITE)) {
+#else
         if (!SPITransfer__AsyncTimeout(interface, data_byte, packet, SPI_WRITE)) {
+#endif
             #ifdef DBG_SD_WRITEDATAPACKET
             UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
             #endif
@@ -1011,13 +1267,21 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
     }
 #if 1
     uint16_t crc;
+#if 1
+    if (!SPITransfer__SyncTimeout(interface, &crc, sizeof(crc), SPI_READ)) {
+#else
     if (!SPITransfer__AsyncTimeout(interface, &crc, sizeof(crc), SPI_READ)) {
+#endif
         return false;
     }
 #endif
 
     for (i = 0; (i < retries) && (byte != 0x05); i++) {
+#if 1
+        if (!SPITransfer__SyncTimeout(interface, &byte, 1, SPI_READ)) {
+#else
         if (!SPITransfer__AsyncTimeout(interface, &byte, 1, SPI_READ)) {
+#endif
             #ifdef DBG_SD_WRITEDATAPACKET
             UART_Printf(debug,"false %s(%d)\r\n", __FILE__, __LINE__);
             #endif
@@ -1178,7 +1442,7 @@ bool SD_WriteBlock(SPIMaster *interface, uint32_t addr, void *data)
 }
 #endif
 
-#if 1
+#if 0
 // 20200907 taylor
 bool SD_WriteNBlock(SPIMaster *interface, uint32_t addr, void *data, uint32_t cnt)
 {
@@ -1522,13 +1786,22 @@ DSTATUS SD_disk_initialize (BYTE drv)
   UART_Printf(debug, "SPIMaster_Configure ret = %d %s : %d \r\n", ret, __FILE__, __LINE__);
     #endif
 
+#if 1
+  // 20210107 taylor
+  // from CodethinkLabs
+  // Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+  if (!(timer = GPT_Open(
+      MT3620_UNIT_GPT3, MT3620_GPT_3_LOW_SPEED, GPT_MODE_ONE_SHOT))) {
+      return NULL;
+  }
+#else
   #if 1
   // 20200902 taylor
   if (!(timer = GPT_Open(MT3620_UNIT_GPT1, 993, GPT_MODE_ONE_SHOT))) {
       return NULL;
   }
   #endif
-
+#endif
 	/* power on */
 	SD_PowerOn();
 
@@ -2056,7 +2329,7 @@ DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff)
 
 #endif
 
-#if 1
+#if 0
 // 20201014 taylor
 // from CodethinkLabs
 // Commit: 144f6a9b2e22301c29405cdeae62126d79251b64 [144f6a9]
@@ -2067,6 +2340,13 @@ bool SD_WriteBlock(SDCard *card, uint32_t addr, const void *data)
         return false;
     }
 
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    static unsigned num_retries = NUM_WRITE_RETRIES;
+#endif
+
     SD_R1 response;
     if (!SD_CommandIncomplete(card->interface, WRITE_BLOCK, addr, sizeof(response), &response)) {
         return false;
@@ -2076,6 +2356,25 @@ bool SD_WriteBlock(SDCard *card, uint32_t addr, const void *data)
         return false;
     }
 
+#if 1
+// 20210107 taylor
+// from CodethinkLabs
+// Commit: 80bc86bb09b295786d6dd6f2acff5d76729ad295 [80bc86b]
+    if (!SD_WriteDataPacket(card, card->blockLen, data)) {
+        if (num_retries > 0) {
+            num_retries--;
+            return SD_WriteBlock(card, addr, data);
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        num_retries = NUM_WRITE_RETRIES;
+        return true;
+    }
+#else
     return SD_WriteDataPacket(card, card->blockLen, data);
+#endif
 }
 #endif

@@ -1,0 +1,10 @@
+{
+  "SchemaVersion": 1,
+  "Name": "ThreadX_RTApp_MT3620_BareMetal",
+  "ComponentId": "ca263f3e-dad8-4ebb-8874-83c2317d8956",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+  },
+  "ApplicationType": "RealTimeCapable"
+}

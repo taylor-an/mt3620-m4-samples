@@ -231,22 +231,38 @@ _Noreturn void RTCoreMain(void)
         buffw[i] = i;
     }
 
-    for (i = 0; i < 0x762c00; i+=100)
-    //for (i = 0; i < 5; i++)
+    //for (i = 0; i < 0x762c00; i+=100)
+    for (i = 0; i < 5; i++)
     {
         memset(buff, 0, sizeof(buff));
         
+#if 1
+        if (!SD_WriteBlock(card, i, buffw)) {
+            UART_Printf(debug,
+                "ERROR: Failed to write %d block of SD card\r\n", i);
+            while (1);
+        }
+#else
         if (!SD_WriteBlock(driver, i, buffw)) {
             UART_Printf(debug,
                 "ERROR: Failed to write %d block of SD card\r\n", i);
             while (1);
         }
+#endif
 
+#if 1
+        if (!SD_ReadBlock(card, i, buff)) {
+            UART_Printf(debug,
+                "ERROR: Failed to read %d block of SD card\r\n", i);
+            while (1);
+        }
+#else
         if (!SD_ReadBlock(driver, i, buff)) {
             UART_Printf(debug,
                 "ERROR: Failed to read %d block of SD card\r\n", i);
             while (1);
         }
+#endif
         else {
             UART_Printf(debug, "SD Card Data block %d:\r\n", i);
 #if 1
@@ -274,7 +290,8 @@ _Noreturn void RTCoreMain(void)
 
     
     #endif
-    
+
+#if 0
     UART_Print(debug,
         "Press button A to read block.\r\n");
 
@@ -290,6 +307,7 @@ _Noreturn void RTCoreMain(void)
                                   GPT_UNITS_MILLISEC, &HandleButtonTimerIrq)) != ERROR_NONE) {
         UART_Printf(debug, "ERROR: Starting timer (%ld)\r\n", error);
     }
+#endif
     
 #if 0
     int* p;

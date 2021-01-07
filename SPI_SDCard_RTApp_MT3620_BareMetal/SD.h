@@ -55,12 +55,14 @@ DRESULT SD_disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
 DRESULT SD_disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 #endif
 
-#if 1
+#if 0
 // 20201014 taylor
 // from CodethinkLabs
 // Commit: 144f6a9b2e22301c29405cdeae62126d79251b64 [144f6a9]
 
 bool     SD_WriteBlock(SDCard *card, uint32_t addr, const void *data);
+#else
+bool SD_WriteBlock(SPIMaster* interface, uint32_t addr, void* data);
 #endif
 
 #endif // #ifndef SD_H_
