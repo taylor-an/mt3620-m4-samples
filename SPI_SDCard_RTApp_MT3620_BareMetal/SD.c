@@ -958,7 +958,7 @@ static bool SD_Wait(SPIMaster* interface)
 #endif
 
 
-#if 1
+#if 0
 // 20200831 taylor
 static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
 {
@@ -1140,7 +1140,7 @@ static bool SD_WriteDataPacket(SPIMaster *interface, uintptr_t size, void *data)
 
 #endif
 
-#if 1
+#if 0
 // 20200831 taylor
 bool SD_WriteBlock(SPIMaster *interface, uint32_t addr, void *data)
 {
@@ -2076,6 +2076,6 @@ bool SD_WriteBlock(SDCard *card, uint32_t addr, const void *data)
         return false;
     }
 
-    return SD_WriteDataPacket(card, card->blockLen, data);
+    return SD_WriteDataPacket(card, 512, data);
 }
 #endif
