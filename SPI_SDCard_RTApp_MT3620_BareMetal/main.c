@@ -460,39 +460,42 @@ _Noreturn void RTCoreMain(void)
 	UART_Printf(debug, "=================Completed\r\n");
 	//================================================================================
 	
-	//================================================================================
-	// File Write Append
-
-	UART_Printf(debug, "=================\r\n");
-	UART_Printf(debug, "6 File Write Append\r\n");
-	UART_Printf(debug, "=================\r\n");
-	
-	if(false == filewrite_append(0, TEST_FILE, "hello CANTUS\r\n"))
+    uint32_t cnt = 1000;
+    int ret;
+    do
     {
-        UART_Printf(debug, "=================Failed\r\n");
-        while (1);
-    }
-	UART_Printf(debug, "=================Completed\r\n");
-	//================================================================================
-	
-	//================================================================================
-	// File Read
+        //================================================================================
+        // File Write Append
 
-	UART_Printf(debug, "=================\r\n");
-	UART_Printf(debug, "7 File Read\r\n");
-	UART_Printf(debug, "=================\r\n");
-	
-	file_buffer = fileread(0, TEST_FILE, &file_read_len);
-    if(file_buffer == 0)
-    {
-        UART_Printf(debug, "=================Failed\r\n");
-        while (1);
-    }
-	UART_Printf(debug, "%s\r\n", file_buffer);
-	free(file_buffer);
-	UART_Printf(debug, "=================Completed\r\n");
-	//================================================================================
+        UART_Printf(debug, "=================\r\n");
+        UART_Printf(debug, "6 File Write Append\r\n");
+        UART_Printf(debug, "=================\r\n");
 
+        if (false == filewrite_append(0, TEST_FILE, "hello CANTUS\r\n"))
+        {
+            UART_Printf(debug, "=================Failed\r\n");
+            while (1);
+        }
+        UART_Printf(debug, "=================Completed\r\n");
+        //================================================================================
+
+        //================================================================================
+        // File Read
+
+        UART_Printf(debug, "=================\r\n");
+        UART_Printf(debug, "7 File Read\r\n");
+        UART_Printf(debug, "=================\r\n");
+
+        ret = fileread_prt(0, TEST_FILE, &file_read_len);
+        if (ret == -1)
+        {
+            UART_Printf(debug, "=================Failed\r\n");
+            while (1);
+        }
+
+        UART_Printf(debug, "=================Completed\r\n");
+        //================================================================================
+    } while (cnt--);
     #if 0
     FATFS fs;
     FIL fsrc;
@@ -786,13 +789,72 @@ char* fileread(int drive, char* filename, int* len)
 	f_close(fp);
 	
 	UART_Printf(debug, "%d read\r\n", size);
-    #if 1
+    #if 0
     UART_Printf(debug, "> %s\r\n", pngbuf);
     #endif
 	
 	*len = size;
 	
 	return pngbuf;
+}
+
+int fileread_prt(int drive, char* filename, int* len)
+{
+#define READ_PARTIAL_SIZE   100
+    FIL fsrc;
+    FIL* fp = &fsrc;
+    int fsize;
+    int rsize;
+    int rpsize;
+    char* pngbuf;
+    uint32_t nRead;
+    char string[100];
+    uint32_t i;
+
+    sprintf(string, "%d:%s", drive, filename);
+    UART_Printf(debug, "%s\r\n", string);
+
+    FRESULT res = f_open(fp, string, FA_READ | FA_OPEN_EXISTING);
+    if (res != FR_OK)
+    {
+        UART_Printf(debug, "faild f_open : res : %d\r\n", res);
+        return -1;
+    }
+
+    fsize = f_size(fp);
+
+    if (fsize > READ_PARTIAL_SIZE)
+    {
+        rpsize = READ_PARTIAL_SIZE;
+    }
+    else
+    {
+        rpsize = fsize;
+    }
+
+    pngbuf = malloc(rpsize);
+    if (pngbuf == 0)
+        return -1;
+
+    rsize = 0;
+
+    do
+    {
+        f_read(fp, pngbuf, rpsize, &nRead);
+        rsize += nRead;
+        res = f_lseek(fp, rsize);
+
+        UART_Printf(debug, "\r\n%d/%d read\r\n", rsize, fsize);
+        for (i = 0; i < nRead; i++)
+        {
+            UART_Printf(debug, "%c", pngbuf[i]);
+        }
+    } while (rsize < fsize);
+
+    f_close(fp);
+    free(pngbuf);
+
+    return 0;
 }
 
 bool fileremove(int drive, char* filename)
